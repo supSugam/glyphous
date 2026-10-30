@@ -45,7 +45,7 @@ jobs:
           generate_release_notes: true
 
       - name: Publish Release
-        if: ${{ steps.version.outputs.prerelease == 'false' && github.repository == 'supSugam/glyphous' }}
+        if: ${{ steps.version.outputs.prerelease == 'false' && github.repository == 'supSugam/glyphous' && secrets.GNOME_USER != '' }}
         run: gnome-extensions upload -u "$GNOME_USER" -p "$GNOME_PASSWORD" --accept-tos dist/${{ env.UUID }}.zip
         env:
           GNOME_USER: ${{ secrets.GNOME_USER }}
