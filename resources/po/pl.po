@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-11 12:25+0000\n"
+"POT-Creation-Date: 2026-10-30 10:29+0000\n"
 "PO-Revision-Date: 2026-05-10 21:03+0200\n"
 "Last-Translator: Adam Lewicki <a.lewicki95@gmail.com>\n"
 "Language-Team: \n"
@@ -19,6 +19,68 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 "
 "|| n%100>14) ? 1 : 2);\n"
 "X-Generator: Poedit 3.9\n"
+
+#: src/lib/characters/characterSearchResults.ts:37
+#: src/lib/characters/characterSearchResults.ts:59
+#: src/lib/emoji/emojiSearchResults.ts:31
+#: src/lib/emoji/emojiSearchResults.ts:58
+msgid "Search Results"
+msgstr ""
+
+#: src/lib/characters/characterSearchResults.ts:54
+msgid "No characters found"
+msgstr ""
+
+#: src/lib/characters/characterSection.ts:105 src/lib/emoji/emojiSection.ts:100
+#: src/lib/preferences/general/historySettings.ts:137
+#: src/lib/ui/clipboardDialog.ts:221 src/lib/ui/indicator.ts:54
+msgid "Clear"
+msgstr "Wyczyść"
+
+#: src/lib/characters/characterSection.ts:110 src/lib/emoji/emojiSection.ts:105
+msgid "Clear Recents"
+msgstr ""
+
+#: src/lib/characters/characterToast.ts:32 src/lib/emoji/emojiToast.ts:32
+#, javascript-format
+msgid "Copied %s"
+msgstr ""
+
+#: src/lib/characters/characterTypes.ts:29 src/lib/emoji/emojiTypes.ts:38
+msgid "Recent"
+msgstr ""
+
+#: src/lib/characters/characterTypes.ts:30
+msgid "Punctuation"
+msgstr ""
+
+#: src/lib/characters/characterTypes.ts:31
+msgid "Arrows"
+msgstr ""
+
+#: src/lib/characters/characterTypes.ts:32
+msgid "Currency"
+msgstr ""
+
+#: src/lib/characters/characterTypes.ts:33
+msgid "Math"
+msgstr ""
+
+#: src/lib/characters/characterTypes.ts:34
+msgid "Fractions & Numbers"
+msgstr ""
+
+#: src/lib/characters/characterTypes.ts:35
+msgid "Shapes & Bullets"
+msgstr ""
+
+#: src/lib/characters/characterTypes.ts:36
+msgid "Latin & Accents"
+msgstr ""
+
+#: src/lib/characters/characterTypes.ts:37
+msgid "Greek & Technical"
+msgstr ""
 
 #: src/lib/common/actions.ts:182
 msgid "Open"
@@ -85,6 +147,50 @@ msgstr "Wyłącz ostrzeżenie"
 #: src/lib/database/entryTracker.ts:164
 msgid "Failed to load JSON"
 msgstr "Błąd podczas ładowania pliku JSON"
+
+#: src/lib/emoji/emojiSearchResults.ts:53
+msgid "No emojis found"
+msgstr ""
+
+#: src/lib/emoji/emojiSkinToneSelector.ts:41
+msgid "Skin Tone"
+msgstr ""
+
+#: src/lib/emoji/emojiTypes.ts:39
+msgid "Smileys & Emotion"
+msgstr ""
+
+#: src/lib/emoji/emojiTypes.ts:40
+msgid "People & Body"
+msgstr ""
+
+#: src/lib/emoji/emojiTypes.ts:41
+msgid "Animals & Nature"
+msgstr ""
+
+#: src/lib/emoji/emojiTypes.ts:42
+msgid "Food & Drink"
+msgstr ""
+
+#: src/lib/emoji/emojiTypes.ts:43
+msgid "Travel & Places"
+msgstr ""
+
+#: src/lib/emoji/emojiTypes.ts:44
+msgid "Activities"
+msgstr ""
+
+#: src/lib/emoji/emojiTypes.ts:45
+msgid "Objects"
+msgstr ""
+
+#: src/lib/emoji/emojiTypes.ts:46
+msgid "Symbols"
+msgstr ""
+
+#: src/lib/emoji/emojiTypes.ts:47
+msgid "Flags"
+msgstr ""
 
 #: src/lib/misc/notifications.ts:63 src/lib/misc/notifications.ts:114
 msgid "Copied Text"
@@ -746,6 +852,7 @@ msgstr "Pokaż liczbę znaków, słów lub linii"
 
 #: src/lib/preferences/customization/items/codeItemCustomization.ts:42
 #: src/lib/preferences/customization/items/textItemCustomization.ts:30
+#: src/lib/ui/clipboardDialog.ts:129
 msgid "Characters"
 msgstr "Znaki"
 
@@ -1050,6 +1157,30 @@ msgstr "Kompaktowy"
 #: src/lib/preferences/customization/themeCustomization.ts:75
 msgid "Custom"
 msgstr "Własny"
+
+#: src/lib/preferences/customization/tabsCustomization.ts:14
+msgid "Tabs"
+msgstr ""
+
+#: src/lib/preferences/customization/tabsCustomization.ts:15
+msgid "Configure tabs in the clipboard dialog"
+msgstr ""
+
+#: src/lib/preferences/customization/tabsCustomization.ts:19
+msgid "Emoji Picker Tab"
+msgstr ""
+
+#: src/lib/preferences/customization/tabsCustomization.ts:20
+msgid "Show the emoji picker tab in the clipboard dialog"
+msgstr ""
+
+#: src/lib/preferences/customization/tabsCustomization.ts:25
+msgid "Symbols & Characters Tab"
+msgstr ""
+
+#: src/lib/preferences/customization/tabsCustomization.ts:26
+msgid "Show the symbols and special characters tab in the clipboard dialog"
+msgstr ""
 
 #: src/lib/preferences/customization/themeCustomization.ts:69
 #: src/lib/preferences/customization/themeCustomization.ts:73
@@ -1498,12 +1629,6 @@ msgstr ""
 "wylogowywania lub zamykania systemu"
 
 #: src/lib/preferences/general/historySettings.ts:137
-#: src/lib/ui/clipboardDialog.ts:131 src/lib/ui/clipboardDialog.ts:236
-#: src/lib/ui/indicator.ts:54
-msgid "Clear"
-msgstr "Wyczyść"
-
-#: src/lib/preferences/general/historySettings.ts:137
 msgid "Keep All"
 msgstr "Zachowaj wszystko"
 
@@ -1572,18 +1697,26 @@ msgid "Open Clipboard Dialog"
 msgstr "Otwórz okno dialogowe schowka"
 
 #: src/lib/preferences/shortcuts/dialogShortcuts.ts:23
+msgid "Open Emoji Picker"
+msgstr ""
+
+#: src/lib/preferences/shortcuts/dialogShortcuts.ts:26
+msgid "Open Symbols Picker"
+msgstr ""
+
+#: src/lib/preferences/shortcuts/dialogShortcuts.ts:29
 msgid "Toggle Incognito Mode"
 msgstr "Włącz tryb prywatny"
 
-#: src/lib/preferences/shortcuts/dialogShortcuts.ts:27
+#: src/lib/preferences/shortcuts/dialogShortcuts.ts:33
 msgid "Open Clipboard Dialog Behavior"
 msgstr "Zachowanie otwarcia okna schowka"
 
-#: src/lib/preferences/shortcuts/dialogShortcuts.ts:28
+#: src/lib/preferences/shortcuts/dialogShortcuts.ts:34
 msgid "Open / Select Next Item"
 msgstr "Otwórz / Wybierz kolejny element"
 
-#: src/lib/preferences/shortcuts/dialogShortcuts.ts:28
+#: src/lib/preferences/shortcuts/dialogShortcuts.ts:34
 msgid "Toggle Dialog"
 msgstr "Przełącz okno"
 
@@ -1738,6 +1871,18 @@ msgstr "Wyłącz skrót klawiszowy"
 msgid "Disabled"
 msgstr "Wyłączono"
 
+#: src/lib/ui/clipboardDialog.ts:88 src/lib/ui/clipboardDialog.ts:123
+msgid "Clipboard"
+msgstr ""
+
+#: src/lib/ui/clipboardDialog.ts:97
+msgid "Clear all"
+msgstr ""
+
+#: src/lib/ui/clipboardDialog.ts:126
+msgid "Emoji"
+msgstr ""
+
 #: src/lib/ui/components/contentInfo.ts:35
 #, javascript-format
 msgid "%dh"
@@ -1861,55 +2006,63 @@ msgstr "Schowek jest pusty"
 msgid "No Items Found"
 msgstr "Nie znaleziono elementów"
 
-#: src/lib/ui/searchEntry.ts:153
+#: src/lib/ui/searchEntry.ts:154
 msgid "__All"
 msgstr "Wszystko"
 
-#: src/lib/ui/searchEntry.ts:157
+#: src/lib/ui/searchEntry.ts:158
 msgid "__Text"
 msgstr "Tekst"
 
-#: src/lib/ui/searchEntry.ts:158
+#: src/lib/ui/searchEntry.ts:159
 msgid "__Code"
 msgstr "Kod"
 
-#: src/lib/ui/searchEntry.ts:159
+#: src/lib/ui/searchEntry.ts:160
 msgid "__Image"
 msgstr "Obraz"
 
-#: src/lib/ui/searchEntry.ts:160
+#: src/lib/ui/searchEntry.ts:161
 msgid "__File"
 msgstr "Plik"
 
-#: src/lib/ui/searchEntry.ts:161
+#: src/lib/ui/searchEntry.ts:162
 msgid "File__s"
 msgstr "Pliki"
 
-#: src/lib/ui/searchEntry.ts:162
+#: src/lib/ui/searchEntry.ts:163
 msgid "__Link"
 msgstr "Odnośnik"
 
-#: src/lib/ui/searchEntry.ts:163
+#: src/lib/ui/searchEntry.ts:164
 msgid "C__haracter"
 msgstr "Znak"
 
-#: src/lib/ui/searchEntry.ts:164
+#: src/lib/ui/searchEntry.ts:165
 msgid "Colo__r"
 msgstr "Kolor"
 
-#: src/lib/ui/searchEntry.ts:276
+#: src/lib/ui/searchEntry.ts:281 src/lib/ui/searchEntry.ts:400
 msgid "Type to search"
 msgstr "Wpisz, aby wyszukać"
 
-#: src/prefs.ts:76
+#: src/lib/ui/searchEntry.ts:410
+msgid "Search emojis…"
+msgstr ""
+
+#: src/lib/ui/searchEntry.ts:416
+msgid "Search characters…"
+msgstr ""
+
+#: src/prefs.ts:77
 msgid "General"
 msgstr "Ogólne"
 
-#: src/prefs.ts:97
+#: src/prefs.ts:98
 msgid "Customization"
 msgstr "Personalizacja"
 
-#: src/prefs.ts:114
+#: src/prefs.ts:116
 msgid "Shortcuts"
 msgstr "Skróty klawiszowe"
 
