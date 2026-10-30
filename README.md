@@ -1,6 +1,4 @@
 # <img src="resources/images/icon.svg" height="32px" alt="Icon"/> Glyphous
-[![GitHub License](https://img.shields.io/github/license/supSugam/glyphous)](./LICENSE)
-[![GitHub Release](https://img.shields.io/github/v/release/supSugam/glyphous)](https://github.com/supSugam/glyphous/releases/latest)
 
 > All-in-one clipboard manager, emoji picker, and character map for GNOME.
 
@@ -37,28 +35,33 @@ The extension requires the following dependencies for full functionality:
 <details>
 <summary>Install dependencies</summary>
 
-| Distro        | Command                                                                            |
-|---------------|------------------------------------------------------------------------------------|
-| Fedora        | `sudo dnf install libgda libgda-sqlite`                                            |
-| Arch Linux    | `sudo pacman -S libgda6`                                                           |
-| Ubuntu/Debian | `sudo apt install gir1.2-gda-5.0 gir1.2-gsound-1.0`                               |
+| Distro        | Command                                                                             |
+|---------------|-------------------------------------------------------------------------------------|
+| Fedora        | `sudo dnf install libgda libgda-sqlite`                                             |
+| Arch Linux    | `sudo pacman -S libgda6`                                                            |
+| Ubuntu/Debian | `sudo apt install gir1.2-gda-5.0 gir1.2-gsound-1.0`                                |
 | openSUSE      | `sudo zypper install libgda-6_0-sqlite typelib-1_0-Gda-6_0 typelib-1_0-GSound-1_0` |
 
 </details>
 
-### From Latest GitHub Release
-1. Download the latest release from [Releases](https://github.com/supSugam/glyphous/releases).
-2. Install the extension:
-   ```shell
-   gnome-extensions install -f ~/Downloads/glyphous@supsugam.github.com.zip
-   ```
-3. Log out and log back in.
-4. Enable the extension in [Extension Manager](https://flathub.org/en/apps/com.mattjakeman.ExtensionManager) or run:
+### One-line Install / Update
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/supSugam/glyphous/main/install.sh | bash
+```
+
+This downloads the latest release, installs it, and prints next steps. Run the same command again at any time to update.
+
+After installing:
+1. Log out and log back in *(required for first install on Wayland)*
+2. Enable the extension:
    ```shell
    gnome-extensions enable glyphous@supsugam.github.com
    ```
+   Or open the **Extensions** app and toggle Glyphous on.
 
 ### From Source
+
 1. Install prerequisites:
    - Make
    - Node.js
@@ -91,19 +94,19 @@ gnome-extensions prefs glyphous@supsugam.github.com
 
 Key shortcuts for common actions. Most can be customized in extension settings.
 
-| Description           | Shortcut                                                                                                      |
-|-----------------------|---------------------------------------------------------------------------------------------------------------|
-| Open Clipboard Dialog | <kbd>Super</kbd> <kbd>Shift</kbd> <kbd>V</kbd>                                                                |
-| Toggle Incognito Mode | <kbd>Super</kbd> <kbd>Shift</kbd> <kbd>Ctrl</kbd> <kbd>V</kbd>                                                |
-| Copy Item             | <kbd>Enter</kbd> / <kbd>Space</kbd>                                                                           |
-| Run Default Action    | <kbd>Ctrl</kbd> <kbd>Enter</kbd> / <kbd>Space</kbd>                                                           |
-| Pin Item              | <kbd>Ctrl</kbd> <kbd>S</kbd>                                                                                  |
-| Delete Item           | <kbd>Delete</kbd> (hold <kbd>Shift</kbd> to force delete)                                                     |
+| Description           | Shortcut                                                                                                       |
+|-----------------------|----------------------------------------------------------------------------------------------------------------|
+| Open Clipboard Dialog | <kbd>Super</kbd> <kbd>Shift</kbd> <kbd>V</kbd>                                                                 |
+| Toggle Incognito Mode | <kbd>Super</kbd> <kbd>Shift</kbd> <kbd>Ctrl</kbd> <kbd>V</kbd>                                                 |
+| Copy Item             | <kbd>Enter</kbd> / <kbd>Space</kbd>                                                                            |
+| Run Default Action    | <kbd>Ctrl</kbd> <kbd>Enter</kbd> / <kbd>Space</kbd>                                                            |
+| Pin Item              | <kbd>Ctrl</kbd> <kbd>S</kbd>                                                                                   |
+| Delete Item           | <kbd>Delete</kbd> (hold <kbd>Shift</kbd> to force delete)                                                      |
 | Navigation            | <kbd>Tab</kbd> / <kbd>↑</kbd> / <kbd>↓</kbd> / <kbd>←</kbd> / <kbd>→</kbd> / <kbd>Home</kbd> / <kbd>End</kbd> |
-| Jump to Item          | <kbd>Ctrl</kbd> <kbd>0</kbd>...<kbd>9</kbd>                                                                   |
-| Toggle Pinned Search  | <kbd>Alt</kbd>                                                                                                |
-| Cycle Item Type       | <kbd>Ctrl</kbd> <kbd>Tab</kbd> / <kbd>Shift</kbd> <kbd>Ctrl</kbd> <kbd>Tab</kbd>                              |
-| Cycle Item Tag        | <kbd>Ctrl</kbd> <kbd>\`</kbd> / <kbd>Shift</kbd> <kbd>Ctrl</kbd> <kbd>\`</kbd>                                |
+| Jump to Item          | <kbd>Ctrl</kbd> <kbd>0</kbd>...<kbd>9</kbd>                                                                    |
+| Toggle Pinned Search  | <kbd>Alt</kbd>                                                                                                 |
+| Cycle Item Type       | <kbd>Ctrl</kbd> <kbd>Tab</kbd> / <kbd>Shift</kbd> <kbd>Ctrl</kbd> <kbd>Tab</kbd>                               |
+| Cycle Item Tag        | <kbd>Ctrl</kbd> <kbd>\`</kbd> / <kbd>Shift</kbd> <kbd>Ctrl</kbd> <kbd>\`</kbd>                                 |
 
 ## DBus
 
