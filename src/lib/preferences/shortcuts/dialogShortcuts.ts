@@ -20,6 +20,12 @@ export class DialogShortcuts extends Adw.PreferencesGroup {
 		const openDialog = new ShortcutRow(_('Open Clipboard Dialog'), '', true);
 		this.add(openDialog);
 
+		const openEmoji = new ShortcutRow(_('Open Emoji Picker'), '', true);
+		this.add(openEmoji);
+
+		const openCharacters = new ShortcutRow(_('Open Symbols Picker'), '', true);
+		this.add(openCharacters);
+
 		const toggleIncognito = new ShortcutRow(_('Toggle Incognito Mode'), '', true);
 		this.add(toggleIncognito);
 
@@ -32,10 +38,14 @@ export class DialogShortcuts extends Adw.PreferencesGroup {
 		// Bind properties
 		const settings: CopyousSettings = prefs.getSettings();
 		settings.bind('open-clipboard-dialog-shortcut', openDialog, 'shortcuts', Gio.SettingsBindFlags.DEFAULT);
+		settings.bind('open-emoji-picker-shortcut', openEmoji, 'shortcuts', Gio.SettingsBindFlags.DEFAULT);
+		settings.bind('open-characters-picker-shortcut', openCharacters, 'shortcuts', Gio.SettingsBindFlags.DEFAULT);
 		settings.bind('toggle-incognito-mode-shortcut', toggleIncognito, 'shortcuts', Gio.SettingsBindFlags.DEFAULT);
 		bind_enum(settings, 'open-clipboard-dialog-behavior', openDialogBehaviour, 'selected');
 
 		makeResettable(openDialog, settings, 'open-clipboard-dialog-shortcut');
+		makeResettable(openEmoji, settings, 'open-emoji-picker-shortcut');
+		makeResettable(openCharacters, settings, 'open-characters-picker-shortcut');
 		makeResettable(toggleIncognito, settings, 'toggle-incognito-mode-shortcut');
 		makeResettable(openDialogBehaviour, settings, 'open-clipboard-dialog-behavior');
 	}

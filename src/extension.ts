@@ -8,7 +8,7 @@ import type { LanguageFn } from 'highlight.js';
 
 import { getDataPath, getHljsLanguages, getHljsPath } from './lib/common/constants.js';
 import { DbusService } from './lib/common/dbus.js';
-import { ClipboardHistory, CopyousSettings, migrateSettings } from './lib/common/settings.js';
+import { ClipboardHistory, GlyphousSettings, migrateSettings } from './lib/common/settings.js';
 import { SoundManager, tryCreateSoundManager } from './lib/common/sound.js';
 import { ClipboardEntry } from './lib/database/database.js';
 import { ClipboardEntryTracker } from './lib/database/entryTracker.js';
@@ -17,10 +17,11 @@ import { NotificationManager } from './lib/misc/notifications.js';
 import { ShortcutManager } from './lib/misc/shortcuts.js';
 import { ThemeManager } from './lib/misc/theme.js';
 import { ClipboardDialog } from './lib/ui/clipboardDialog.js';
+import { DialogTab } from './lib/ui/components/dialogTabsTypes.js';
 import { ClipboardIndicator } from './lib/ui/indicator.js';
 
-export default class CopyousExtension extends Extension {
-	public settings!: CopyousSettings;
+export default class GlyphousExtension extends Extension {
+	public settings!: GlyphousSettings;
 	public logger!: ConsoleLike;
 
 	public hljs: HLJSApi | null | undefined;
@@ -34,6 +35,7 @@ export default class CopyousExtension extends Extension {
 	private indicator: ClipboardIndicator | undefined;
 
 	private dbus: DbusService | undefined;
+	private _resource: Gio.Resource | undefined;
 
 	public notificationManager: NotificationManager | undefined;
 	private soundManager: SoundManager | undefined;
@@ -52,6 +54,18 @@ export default class CopyousExtension extends Extension {
 
 		this.logger = this.getLogger();
 		const error = this.logger.error.bind(this.logger);
+
+		// Resources
+		const resourceFile = this.dir.get_child('resources.gresource');
+		const resourcePath = resourceFile.get_path();
+		if (resourcePath && resourceFile.query_exists(null)) {
+			try {
+				this._resource = Gio.Resource.load(resourcePath);
+				this._resource._register();
+			} catch (e) {
+				this.logger.error(e);
+			}
+		}
 
 		// Highlight.js
 		this.initHljs().catch(error);
@@ -120,6 +134,10 @@ export default class CopyousExtension extends Extension {
 		this.shortcutsManager.connectObject(
 			'open-clipboard-dialog',
 			() => this.clipboardDialog?.dialogShortcut(),
+			'open-emoji-picker',
+			() => this.clipboardDialog?.openTab(DialogTab.Emoji),
+			'open-characters-picker',
+			() => this.clipboardDialog?.openTab(DialogTab.Characters),
 			'toggle-incognito-mode',
 			() => this.indicator?.toggleIncognito(),
 			this,
@@ -339,25 +357,32 @@ export default class CopyousExtension extends Extension {
 		this.clipboardManager = undefined;
 
 		// Globals
+		if (this._resource) {
+			this._resource._unregister();
+			this._resource = undefined;
+		}
+
 		this.settings?.disconnectObject(this);
 		this.settings = undefined!;
 		this.logger = undefined!;
 	}
 
 	/* DEBUG-ONLY */
-	override getSettings(schema?: string): Gio.Settings & CopyousSettings {
+	override getSettings(schema?: string): Gio.Settings & GlyphousSettings {
 		try {
 			const environment = GLib.get_environ();
-			const settings = GLib.environ_getenv(environment, 'DEBUG_COPYOUS_SCHEMA');
+			const settings = GLib.environ_getenv(environment, 'DEBUG_GLYPHOUS_SCHEMA');
 			if (settings) {
 				this.getLogger().log('Using debug schema');
 				schema ??= this.metadata['settings-schema'] + '.debug';
 			}
 
-			return super.getSettings(schema) as Gio.Settings & CopyousSettings;
+			return super.getSettings(schema) as Gio.Settings & GlyphousSettings;
 		} catch {
 			// Fallback for when debug schema does not exist
-			return super.getSettings() as Gio.Settings & CopyousSettings;
+			return super.getSettings() as Gio.Settings & GlyphousSettings;
 		}
 	}
 }
+
+export type CopyousExtension = GlyphousExtension;

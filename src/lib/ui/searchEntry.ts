@@ -15,6 +15,7 @@ import { Icon, loadIcon } from '../common/icons.js';
 import { ClipboardEntry } from '../database/database.js';
 import { ButtonMask } from '../misc/compatibility.js';
 import { Shortcut } from '../misc/shortcuts.js';
+import { DialogTab } from './components/dialogTabsTypes.js';
 import { TagsItem } from './components/tagsItem.js';
 
 const SearchCollator = new Intl.Collator(undefined, { sensitivity: 'base' });
@@ -265,9 +266,13 @@ export class SearchEntry extends St.Entry {
 	private _pinned: boolean = false;
 	private _tag: Tag | null = null;
 	private _type: ItemType | null = null;
+	private _mode: DialogTab = DialogTab.Clipboard;
 
 	private readonly _icons: { [type in ItemType | 'search']: Gio.Icon };
 	private readonly _itemButton: St.Button;
+	private readonly _searchIcon: St.Icon;
+	private readonly _arrowIcon: St.Icon;
+	private readonly _pinButton: St.Button;
 	private readonly _menu: ItemPopupMenu;
 
 	constructor(private ext: CopyousExtension) {
@@ -314,17 +319,17 @@ export class SearchEntry extends St.Entry {
 		const itemButtonContent = new St.BoxLayout();
 		this._itemButton.add_child(itemButtonContent);
 
-		const searchIcon = new St.Icon({
+		this._searchIcon = new St.Icon({
 			style_class: 'search-entry-icon',
 			gicon: this._icons.search,
 		});
-		itemButtonContent.add_child(searchIcon);
-		itemButtonContent.add_child(
-			new St.Icon({
-				style_class: 'arrow-icon',
-				icon_name: Icon.Down,
-			}),
-		);
+		itemButtonContent.add_child(this._searchIcon);
+
+		this._arrowIcon = new St.Icon({
+			style_class: 'arrow-icon',
+			icon_name: Icon.Down,
+		});
+		itemButtonContent.add_child(this._arrowIcon);
 
 		// Menu
 		this._menu = new ItemPopupMenu(this._itemButton, 0.5, St.Side.TOP);
@@ -340,9 +345,9 @@ export class SearchEntry extends St.Entry {
 		this._menu.connect('selected-changed', (_menu: unknown, type: ItemType | null) => {
 			this.type = type;
 			if (type) {
-				searchIcon.gicon = this._icons[type];
+				this._searchIcon.gicon = this._icons[type];
 			} else {
-				searchIcon.gicon = this._icons.search;
+				this._searchIcon.gicon = this._icons.search;
 			}
 			return undefined;
 		});
@@ -353,7 +358,7 @@ export class SearchEntry extends St.Entry {
 		right.connect('key-press-event', (_btn, event: Clutter.Event) => this._rightKeyPressEvent(event));
 
 		// Pin button
-		const pinButton = new St.Button({
+		this._pinButton = new St.Button({
 			style_class: 'search-entry-button pin-button',
 			toggle_mode: true,
 			child: new St.Bin({
@@ -364,10 +369,10 @@ export class SearchEntry extends St.Entry {
 				}),
 			}),
 		});
-		right.add_child(pinButton);
+		right.add_child(this._pinButton);
 
 		// Bind properties
-		pinButton.bind_property('checked', this, 'pinned', GObject.BindingFlags.BIDIRECTIONAL);
+		this._pinButton.bind_property('checked', this, 'pinned', GObject.BindingFlags.BIDIRECTIONAL);
 
 		this.ext.settings.connectObject(
 			'changed::exclude-pinned',
@@ -380,6 +385,40 @@ export class SearchEntry extends St.Entry {
 		// Connect signals
 		this.connect('notify::text', this.search.bind(this));
 		this.clutter_text.connect('key-press-event', (_text, event: Clutter.Event) => this._keyPressEvent(event));
+	}
+
+	get mode(): DialogTab {
+		return this._mode;
+	}
+
+	public setTab(tab: DialogTab): void {
+		if (this._mode === tab) return;
+		this._mode = tab;
+		this.text = '';
+
+		if (tab === DialogTab.Clipboard) {
+			this.hint_text = _('Type to search');
+			this._arrowIcon.visible = true;
+			this._itemButton.reactive = true;
+			this._pinButton.visible = true;
+			if (this.type) {
+				this._searchIcon.gicon = this._icons[this.type];
+			} else {
+				this._searchIcon.gicon = this._icons.search;
+			}
+		} else if (tab === DialogTab.Emoji) {
+			this.hint_text = _('Search emojis…');
+			this._arrowIcon.visible = false;
+			this._itemButton.reactive = false;
+			this._pinButton.visible = false;
+			this._searchIcon.gicon = this._icons.search;
+		} else if (tab === DialogTab.Characters) {
+			this.hint_text = _('Search characters…');
+			this._arrowIcon.visible = false;
+			this._itemButton.reactive = false;
+			this._pinButton.visible = false;
+			this._searchIcon.gicon = this._icons.search;
+		}
 	}
 
 	get pinned() {

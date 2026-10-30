@@ -108,6 +108,8 @@ export class HoleEffect extends HoleEffectBase {
 
 	override vfunc_paint_target(node: Clutter.PaintNode, paintContext: Clutter.PaintContext) {
 		const size = this.actor.get_transformed_size();
+		if (size[0] <= 0 || size[1] <= 0) return;
+
 		this.setUniform('size', 2, size);
 
 		const position = this.target.apply_relative_transform_to_point(this.actor, new Graphene.Point3D());

@@ -114,10 +114,12 @@ export class ClipboardManager extends GObject.Object {
 		this.pasteSignalId = -1;
 	}
 
-	public copyContent(content: ClipboardContent) {
+	public copyContent(content: ClipboardContent, isExistingEntry: boolean = false) {
 		const checksum = contentChecksum(content);
 		if (!checksum) return;
-		this.prevClipboard = [content.type, checksum];
+		if (isExistingEntry) {
+			this.prevClipboard = [content.type, checksum];
+		}
 
 		// Text
 		if (content.type === ContentType.Text) {
@@ -143,40 +145,63 @@ export class ClipboardManager extends GObject.Object {
 		}
 	}
 
-	public pasteContent(content: ClipboardContent) {
-		this.copyContent(content);
+	public sendPasteKeystroke() {
+		this.keyboard ??= new Keyboard();
+
+		// https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator/blob/89c57703641a9d5d15f899f6e780174641911d95/extension.js#L1094
+		if (this.keyboard.purpose === Clutter.InputContentPurpose.TERMINAL) {
+			this.keyboard.press(Clutter.KEY_Control_L);
+			this.keyboard.press(Clutter.KEY_Shift_L);
+			this.keyboard.press(Clutter.KEY_Insert);
+			this.keyboard.release(Clutter.KEY_Insert);
+			this.keyboard.release(Clutter.KEY_Shift_L);
+			this.keyboard.release(Clutter.KEY_Control_L);
+		} else {
+			this.keyboard.press(Clutter.KEY_Shift_L);
+			this.keyboard.press(Clutter.KEY_Insert);
+			this.keyboard.release(Clutter.KEY_Insert);
+			this.keyboard.release(Clutter.KEY_Shift_L);
+		}
+	}
+
+	public pasteContent(content: ClipboardContent, isExistingEntry: boolean = false) {
+		this.copyContent(content, isExistingEntry);
 
 		if (this.pasteSignalId >= 0) GLib.source_remove(this.pasteSignalId);
 		this.pasteSignalId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
-			this.keyboard ??= new Keyboard();
-
-			// https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator/blob/89c57703641a9d5d15f899f6e780174641911d95/extension.js#L1094
-			if (this.keyboard.purpose === Clutter.InputContentPurpose.TERMINAL) {
-				this.keyboard.press(Clutter.KEY_Control_L);
-				this.keyboard.press(Clutter.KEY_Shift_L);
-				this.keyboard.press(Clutter.KEY_Insert);
-				this.keyboard.release(Clutter.KEY_Insert);
-				this.keyboard.release(Clutter.KEY_Shift_L);
-				this.keyboard.release(Clutter.KEY_Control_L);
-			} else {
-				this.keyboard.press(Clutter.KEY_Shift_L);
-				this.keyboard.press(Clutter.KEY_Insert);
-				this.keyboard.release(Clutter.KEY_Insert);
-				this.keyboard.release(Clutter.KEY_Shift_L);
-			}
-
+			this.sendPasteKeystroke();
 			this.pasteSignalId = -1;
 			return GLib.SOURCE_REMOVE;
 		});
 	}
 
 	public copyText(s: string) {
-		this.copyContent({ type: ContentType.Text, text: s });
+		this.copyContent({ type: ContentType.Text, text: s }, false);
 		this.emit('text', s);
 	}
 
 	public pasteText(s: string) {
-		this.pasteContent({ type: ContentType.Text, text: s });
+		this.pasteContent({ type: ContentType.Text, text: s }, false);
+	}
+
+	public pasteTextTransient(text: string) {
+		this.clipboard.get_text(St.ClipboardType.CLIPBOARD, (_clipboard, previousText) => {
+			this.copyContent({ type: ContentType.Text, text }, true);
+
+			if (this.pasteSignalId >= 0) GLib.source_remove(this.pasteSignalId);
+			this.pasteSignalId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
+				this.sendPasteKeystroke();
+				this.pasteSignalId = -1;
+
+				if (previousText && previousText !== text) {
+					GLib.timeout_add(GLib.PRIORITY_DEFAULT, 350, () => {
+						this.copyContent({ type: ContentType.Text, text: previousText }, true);
+						return GLib.SOURCE_REMOVE;
+					});
+				}
+				return GLib.SOURCE_REMOVE;
+			});
+		});
 	}
 
 	public copyPng(data: Uint8Array, width: number, height: number) {
@@ -207,7 +232,7 @@ export class ClipboardManager extends GObject.Object {
 			case ItemType.Link:
 			case ItemType.Character:
 			case ItemType.Color:
-				return fn({ type: ContentType.Text, text: entry.content });
+				return fn({ type: ContentType.Text, text: entry.content }, true);
 			case ItemType.Image:
 				try {
 					const image = Gio.File.new_for_uri(entry.content);
@@ -219,14 +244,14 @@ export class ClipboardManager extends GObject.Object {
 					const checksum = GLib.compute_checksum_for_bytes(GLib.ChecksumType.MD5, contents);
 					if (!checksum) return;
 
-					return fn({ type: ContentType.Image, mimetype, data: contents, checksum });
+					return fn({ type: ContentType.Image, mimetype, data: contents, checksum }, true);
 				} catch {
 					break;
 				}
 			case ItemType.File:
 			case ItemType.Files: {
 				const paths = entry.content.split('\n');
-				return fn({ type: ContentType.File, paths, operation: FileOperation.Copy });
+				return fn({ type: ContentType.File, paths, operation: FileOperation.Copy }, true);
 			}
 		}
 	}

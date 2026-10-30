@@ -107,6 +107,24 @@ $search_bg_color: $card_bg_color;
 					&:active { @include button(active, $c: -st-accent-color, $tc: -st-accent-fg-color, $style: default); }
 				}
 			}
+
+			&.clear-button {
+				padding: $base_padding * 0.5 + 1px;
+				color: st-transparentize($fg_color, 0.45);
+
+				.search-entry-icon {
+					icon-size: $scalable_icon_size * 0.9;
+				}
+
+				&:hover,
+				&:focus {
+					color: $fg_color;
+				}
+
+				&:active {
+					color: -st-accent-color;
+				}
+			}
 		}
 	}
 }

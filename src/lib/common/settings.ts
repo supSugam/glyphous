@@ -47,6 +47,10 @@ export const Settings = {
 	AutoHideSearch: 'auto-hide-search',
 	ShowScrollbar: 'show-scrollbar',
 
+	EnableEmojiTab: 'enable-emoji-tab',
+	EnableCharactersTab: 'enable-characters-tab',
+	EmojiDefaultSkinTone: 'emoji-default-skin-tone',
+
 	ItemWidth: 'item-width',
 	ItemHeight: 'item-height',
 	DynamicItemHeight: 'dynamic-item-height',
@@ -106,6 +110,8 @@ export const Settings = {
 	},
 
 	OpenClipboardDialogShortcut: 'open-clipboard-dialog-shortcut',
+	OpenEmojiPickerShortcut: 'open-emoji-picker-shortcut',
+	OpenCharactersPickerShortcut: 'open-characters-picker-shortcut',
 	ToggleIncognitoModeShortcut: 'toggle-incognito-mode-shortcut',
 	OpenClipboardDialogBehavior: 'open-clipboard-dialog-behavior',
 
@@ -178,6 +184,9 @@ export const SettingsTypes = {
 
 	[Settings.AutoHideSearch]: 'boolean',
 	[Settings.ShowScrollbar]: 'boolean',
+	[Settings.EnableEmojiTab]: 'boolean',
+	[Settings.EnableCharactersTab]: 'boolean',
+	[Settings.EmojiDefaultSkinTone]: 'int',
 
 	[Settings.ItemWidth]: 'int',
 	[Settings.ItemHeight]: 'int',
@@ -189,6 +198,8 @@ export const SettingsTypes = {
 	[Settings.ShowItemTitle]: 'boolean',
 
 	[Settings.OpenClipboardDialogShortcut]: 'strv',
+	[Settings.OpenEmojiPickerShortcut]: 'strv',
+	[Settings.OpenCharactersPickerShortcut]: 'strv',
 	[Settings.ToggleIncognitoModeShortcut]: 'strv',
 	[Settings.OpenClipboardDialogBehavior]: 'enum',
 
@@ -495,7 +506,7 @@ export type CharacterItemSettings = TypedSettings<
 
 export type ThemeSettings = TypedSettings<(typeof SettingsTypes)['theme'], SettingsEnumTypes['theme']>;
 
-export interface CopyousSettings extends TypedSettings<typeof SettingsTypes, SettingsEnumTypes> {
+export interface GlyphousSettings extends TypedSettings<typeof SettingsTypes, SettingsEnumTypes> {
 	get_child(name: typeof ChildKeys.TextItem): TextItemSettings;
 	get_child(name: typeof ChildKeys.CodeItem): CodeItemSettings;
 	get_child(name: typeof ChildKeys.ImageItem): ImageItemSettings;
@@ -504,6 +515,8 @@ export interface CopyousSettings extends TypedSettings<typeof SettingsTypes, Set
 	get_child(name: typeof ChildKeys.CharacterItem): CharacterItemSettings;
 	get_child(name: typeof ChildKeys.Theme): ThemeSettings;
 }
+
+export type CopyousSettings = GlyphousSettings;
 
 export function bind_enum<T, TEnum extends { [K in KeysWithValue<T, 'enum'> | KeysWithValue<T, 'flags'>]: unknown }>(
 	settings: TypedSettings<T, TEnum>,

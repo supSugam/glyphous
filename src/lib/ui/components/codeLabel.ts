@@ -380,7 +380,7 @@ export class CodeLabel extends St.Label {
 				this.notify('language');
 			}
 		} else {
-			text = GLib.markup_escape_text(text, text.length);
+			text = GLib.markup_escape_text(text, -1);
 		}
 
 		this._highlighted = text;

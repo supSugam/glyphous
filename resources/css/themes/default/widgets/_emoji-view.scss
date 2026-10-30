@@ -1,0 +1,270 @@
+.clipboard-dialog {
+	.emoji-view {
+		margin: 0;
+		padding: 0;
+		spacing: 0;
+
+		.emoji-scroll-view {
+			padding: $base_padding * 0.5 $base_padding * 2.5;
+
+			StScrollBar {
+				width: 0;
+				height: 0;
+				opacity: 0;
+			}
+
+			.emoji-content-box {
+				spacing: $base_padding;
+			}
+
+			.emoji-section {
+				spacing: $base_padding * 0.5;
+				margin-bottom: $base_padding * 1.5;
+
+				.emoji-section-header-box {
+					spacing: $base_padding;
+					padding: $base_padding * 0.5 0;
+
+					.emoji-section-header {
+						font-size: 0.82em;
+						font-weight: bold;
+						color: st-transparentize($fg_color, 0.45);
+						padding: 0;
+					}
+
+					.emoji-clear-recents-button {
+						background-color: transparent;
+						border: none;
+						box-shadow: none;
+						border-radius: $base_border_radius;
+						padding: 1px 6px;
+						font-size: 0.78em;
+						font-weight: normal;
+						color: st-transparentize($fg_color, 0.45);
+						transition-duration: 120ms;
+
+						&:hover,
+						&:focus {
+							background-color: st-transparentize($fg_color, 0.92);
+							color: $fg_color;
+						}
+
+						&:active {
+							background-color: st-transparentize($fg_color, 0.84);
+						}
+					}
+				}
+
+				.emoji-section-header {
+					font-size: 0.82em;
+					font-weight: bold;
+					color: st-transparentize($fg_color, 0.45);
+					padding: $base_padding * 0.5 0;
+				}
+
+				.emoji-grid-box {
+					spacing: 3px;
+
+					.emoji-grid-row {
+						spacing: 3px;
+					}
+				}
+			}
+
+			.emoji-search-results {
+				spacing: $base_padding * 0.5;
+				margin-bottom: $base_padding * 1.5;
+
+				.emoji-section-header-box {
+					spacing: $base_padding;
+					padding: $base_padding * 0.5 0;
+
+					.emoji-section-header {
+						font-size: 0.82em;
+						font-weight: bold;
+						color: st-transparentize($fg_color, 0.45);
+						padding: 0;
+					}
+
+					.emoji-clear-recents-button {
+						background-color: transparent;
+						border: none;
+						box-shadow: none;
+						border-radius: $base_border_radius;
+						padding: 1px 6px;
+						font-size: 0.78em;
+						font-weight: normal;
+						color: st-transparentize($fg_color, 0.45);
+						transition-duration: 120ms;
+
+						&:hover,
+						&:focus {
+							background-color: st-transparentize($fg_color, 0.92);
+							color: $fg_color;
+						}
+
+						&:active {
+							background-color: st-transparentize($fg_color, 0.84);
+						}
+					}
+				}
+
+				.emoji-section-header {
+					font-size: 0.82em;
+					font-weight: bold;
+					color: st-transparentize($fg_color, 0.45);
+					padding: $base_padding * 0.5 0;
+				}
+
+				.emoji-grid-box {
+					spacing: 3px;
+
+					.emoji-grid-row {
+						spacing: 3px;
+					}
+				}
+			}
+
+			.emoji-button {
+				width: 36px;
+				height: 36px;
+				min-width: 36px;
+				min-height: 36px;
+				border-radius: $base_border_radius;
+				background-color: transparent;
+				border: none;
+				box-shadow: none;
+				padding: 0;
+				margin: 0;
+				transition-duration: 120ms;
+
+				.emoji-char {
+					font-size: 1.4em;
+					text-align: center;
+				}
+
+				&:hover {
+					background-color: st-transparentize($fg_color, 0.92);
+				}
+
+				&:active {
+					background-color: st-transparentize($fg_color, 0.84);
+				}
+
+				&:focus {
+					background-color: st-transparentize($fg_color, 0.88);
+				}
+			}
+		}
+
+		.emoji-toast {
+			background-color: st-mix($bg_color, $fg_color, 85%);
+			color: $fg_color;
+			border-radius: $forced_circular_radius;
+			border: 1px solid st-transparentize($borders_color, 0.5);
+			box-shadow: 0 2px 8px 0 $shadow_color;
+			padding: 4px 14px;
+			font-size: 0.85em;
+			font-weight: bold;
+			margin-bottom: 8px;
+		}
+
+		.emoji-tone-popup {
+			background-color: $bg_color;
+			border: 1px solid $outer_borders_color;
+			border-radius: $base_border_radius * 1.5;
+			box-shadow: 0 4px 12px 0 $shadow_color;
+			padding: 4px;
+			spacing: 3px;
+			margin-bottom: 6px;
+			margin-right: 12px;
+
+			.emoji-tone-option-button {
+				background-color: transparent;
+				border: none;
+				box-shadow: none;
+				border-radius: $base_border_radius;
+				padding: 3px 6px;
+				transition-duration: 120ms;
+
+				.emoji-tone-swatch-label {
+					font-size: 1.15em;
+				}
+
+				&:hover {
+					background-color: st-transparentize($fg_color, 0.9);
+				}
+
+				&:active {
+					background-color: st-transparentize($fg_color, 0.82);
+				}
+			}
+		}
+
+		.emoji-bottom-bar {
+			padding: $base_padding * 0.8 $base_padding * 2;
+			border-top: 1px solid st-transparentize($borders_color, 0.65);
+			spacing: $base_padding * 0.5;
+			background-color: st-transparentize($bg_color, 0.35);
+
+			.emoji-category-bar {
+				spacing: 2px;
+
+				.emoji-category-button {
+					background-color: transparent;
+					border: none;
+					box-shadow: none;
+					border-radius: $base_border_radius;
+					padding: $scaled_padding * 0.8;
+					color: st-transparentize($fg_color, 0.5);
+					transition-duration: 150ms;
+
+					.emoji-category-icon {
+						icon-size: $scalable_icon_size * 0.9;
+						color: st-transparentize($fg_color, 0.5);
+						transition-duration: 150ms;
+					}
+
+					&:hover {
+						background-color: st-transparentize($fg_color, 0.93);
+						color: $fg_color;
+
+						.emoji-category-icon {
+							color: $fg_color;
+						}
+					}
+
+					&.active,
+					&:checked {
+						color: -st-accent-color;
+						background-color: st-transparentize(-st-accent-color, 0.88);
+
+						.emoji-category-icon {
+							color: -st-accent-color;
+						}
+					}
+				}
+			}
+
+			.emoji-tone-selector {
+				margin-left: $base_padding * 0.5;
+
+				.emoji-tone-button {
+					background-color: transparent;
+					border: none;
+					box-shadow: none;
+					border-radius: $base_border_radius;
+					padding: $scaled_padding * 0.5 $scaled_padding * 0.8;
+
+					.emoji-tone-swatch-label {
+						font-size: 1.1em;
+					}
+
+					&:hover {
+						background-color: st-transparentize($fg_color, 0.92);
+					}
+				}
+			}
+		}
+	}
+}

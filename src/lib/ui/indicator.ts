@@ -88,7 +88,7 @@ export class ClipboardIndicator extends PanelMenu.Button {
 		this.configurePanelMenuClickGesture();
 
 		this._box = new St.BoxLayout({
-			style_class: 'copyous-indicator-box',
+			style_class: 'glyphous-indicator-box',
 			orientation: Clutter.Orientation.HORIZONTAL,
 		});
 		this.add_child(this._box);

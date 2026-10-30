@@ -1,10 +1,10 @@
-# Ukrainian translation for Copyous.
-# Copyright (C) 2026 Copyous
-# This file is distributed under the same license as the Copyous package.
+# Ukrainian translation for Glyphous.
+# Copyright (C) 2026 Glyphous
+# This file is distributed under the same license as the Glyphous package.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Copyous\n"
+"Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-11 12:25+0000\n"
 "PO-Revision-Date: 2026-09-25 12:00+0000\n"

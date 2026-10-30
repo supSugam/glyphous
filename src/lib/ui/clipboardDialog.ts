@@ -1,7 +1,7 @@
 import Clutter from 'gi://Clutter';
 import GObject from 'gi://GObject';
-import Gio from 'gi://Gio';
 import Graphene from 'gi://Graphene';
+import Meta from 'gi://Meta';
 import Shell from 'gi://Shell';
 import St from 'gi://St';
 
@@ -14,15 +14,19 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import { EasingParamsWithProperties } from '@girs/gnome-shell/extensions/global';
 
 import type CopyousExtension from '../../extension.js';
+import { CharactersView } from '../characters/charactersView.js';
 import { ItemType } from '../common/constants.js';
 import { registerClass } from '../common/gjs.js';
 import { Icon, loadIcon } from '../common/icons.js';
 import { OpenClipboardDialogBehavior } from '../common/settings.js';
 import { ClipboardEntry } from '../database/database.js';
+import { EmojiView } from '../emoji/emojiView.js';
 import { VERSION } from '../misc/compatibility.js';
 import { Shortcut } from '../misc/shortcuts.js';
 import { ClipboardScrollView } from './clipboardScrollView.js';
 import { ClipboardItemMenu } from './components/clipboardItemMenu.js';
+import { DialogTab, DialogTabBar } from './components/dialogTabs.js';
+import { IncognitoButton } from './components/incognitoButton.js';
 import { ConfirmClearHistoryDialog } from './indicator.js';
 import { CharacterItem } from './items/characterItem.js';
 import { CodeItem } from './items/codeItem.js';
@@ -32,48 +36,10 @@ import { FilesItem } from './items/filesItem.js';
 import { ImageItem } from './items/imageItem.js';
 import { LinkItem } from './items/linkItem.js';
 import { TextItem } from './items/textItem.js';
-import { CenterBox, CollapsibleHeaderLayout, FitConstraint } from './layout.js';
+import { CollapsibleHeaderLayout, FitConstraint } from './layout.js';
 import { SearchEntry, SearchQuery } from './searchEntry.js';
 
 const ANIMATION_TIME = 150;
-
-@registerClass()
-class IncognitoButton extends St.Button {
-	private readonly _incognitoIcon: Gio.Icon;
-	private readonly _incognitoDisabledIcon: Gio.Icon;
-	private readonly _icon: St.Icon;
-
-	constructor(
-		private ext: CopyousExtension,
-		props: Partial<St.Button.ConstructorProps>,
-	) {
-		super({ ...props, toggle_mode: true, can_focus: true });
-
-		this._incognitoIcon = loadIcon(ext, Icon.Incognito);
-		this._incognitoDisabledIcon = loadIcon(ext, Icon.IncognitoDisabled);
-
-		this._icon = new St.Icon({ gicon: this._incognitoDisabledIcon });
-		this.child = this._icon;
-
-		this.ext.settings.connectObject('changed::incognito', this.update.bind(this), this);
-		this.connect('notify::checked', () => {
-			this.ext.settings.set_boolean('incognito', this.checked);
-			this.update();
-		});
-		this.update();
-	}
-
-	override destroy() {
-		this.ext.settings.disconnectObject(this);
-		super.destroy();
-	}
-
-	private update() {
-		const incognito = this.ext.settings.get_boolean('incognito');
-		this.checked = incognito;
-		this._icon.gicon = incognito ? this._incognitoIcon : this._incognitoDisabledIcon;
-	}
-}
 
 @registerClass({
 	Properties: {
@@ -86,9 +52,9 @@ class IncognitoButton extends St.Button {
 })
 class ClipboardDialogHeader extends St.Widget {
 	private readonly _headerLayout: CollapsibleHeaderLayout;
-	private readonly _headerBox: CenterBox;
-	private readonly _settingsButton: St.Button;
-	private readonly _incognitoButton: St.Button;
+	private readonly _contentBox: St.BoxLayout;
+	private readonly _titleBox: St.BoxLayout;
+	private readonly _titleLabel: St.Label;
 	private readonly _clearButton: St.Button;
 
 	public readonly searchEntry: SearchEntry;
@@ -105,34 +71,41 @@ class ClipboardDialogHeader extends St.Widget {
 		this._headerLayout = new CollapsibleHeaderLayout();
 		this.layout_manager = this._headerLayout;
 
-		this._headerBox = new CenterBox({ style_class: 'dialog-header-box', x_expand: true });
-		this.add_child(this._headerBox);
-
-		// Start
-		this._settingsButton = new St.Button({
-			style_class: 'dialog-header-icon-button',
-			child: new St.Icon({ gicon: loadIcon(ext, Icon.Settings) }),
-			can_focus: true,
+		this._contentBox = new St.BoxLayout({
+			vertical: true,
+			style_class: 'dialog-header-box',
+			x_expand: true,
 		});
-		this._settingsButton.connect('clicked', () => this.emit('open-settings'));
-		this._headerBox.addPrefix(this._settingsButton);
+		this.add_child(this._contentBox);
 
-		this._incognitoButton = new IncognitoButton(ext, { style_class: 'dialog-header-icon-button' });
-		this._headerBox.addPrefix(this._incognitoButton);
+		// Title & Clear Row
+		this._titleBox = new St.BoxLayout({
+			style_class: 'dialog-title-box',
+			orientation: Clutter.Orientation.HORIZONTAL,
+			x_expand: true,
+		});
+		this._titleLabel = new St.Label({
+			text: _('Clipboard'),
+			style_class: 'dialog-title-label',
+			y_align: Clutter.ActorAlign.CENTER,
+		});
+		this._titleBox.add_child(this._titleLabel);
+		this._titleBox.add_child(new St.Widget({ x_expand: true }));
 
-		// Center
-		this.searchEntry = new SearchEntry(ext);
-		this.searchEntry.clutter_text.connect('key-focus-in', () => this.updateHeader(true));
-		this._headerBox.centerWidget = this.searchEntry;
-
-		// End
 		this._clearButton = new St.Button({
-			style_class: 'dialog-header-button',
-			label: _('Clear'),
+			style_class: 'dialog-clear-button',
+			label: _('Clear all'),
 			can_focus: true,
+			y_align: Clutter.ActorAlign.CENTER,
 		});
 		this._clearButton.connect('clicked', () => this.emit('clear-history'));
-		this._headerBox.addSuffix(this._clearButton);
+		this._titleBox.add_child(this._clearButton);
+		this._contentBox.add_child(this._titleBox);
+
+		// Search Entry Row (reused seamlessly across all tabs)
+		this.searchEntry = new SearchEntry(ext);
+		this.searchEntry.clutter_text.connect('key-focus-in', () => this.updateHeader(true));
+		this._contentBox.add_child(this.searchEntry);
 
 		// Bind properties
 		this.ext.settings.connectObject(
@@ -142,6 +115,20 @@ class ClipboardDialogHeader extends St.Widget {
 		);
 
 		this.updateHeader(!this.ext.settings.get_boolean('auto-hide-search'), false);
+	}
+
+	setTab(tab: DialogTab): void {
+		this.searchEntry.setTab(tab);
+		if (tab === DialogTab.Clipboard) {
+			this._titleLabel.text = _('Clipboard');
+			this._clearButton.visible = true;
+		} else if (tab === DialogTab.Emoji) {
+			this._titleLabel.text = _('Emoji');
+			this._clearButton.visible = false;
+		} else if (tab === DialogTab.Characters) {
+			this._titleLabel.text = _('Characters');
+			this._clearButton.visible = false;
+		}
 	}
 
 	override destroy() {
@@ -154,8 +141,6 @@ class ClipboardDialogHeader extends St.Widget {
 	}
 
 	set showButtons(show: boolean) {
-		this._settingsButton.visible = show;
-		this._incognitoButton.visible = show;
 		this._clearButton.visible = show;
 	}
 
@@ -255,6 +240,7 @@ class ClipboardDialogFooter extends St.BoxLayout {
 })
 export class ClipboardDialog extends St.Widget {
 	private _grab: Clutter.Grab | null = null;
+	private _targetWindow: Meta.Window | null = null;
 	private _open: boolean = false;
 	private _closing: boolean = false;
 	private _updateCursor: boolean = true;
@@ -270,10 +256,14 @@ export class ClipboardDialog extends St.Widget {
 	private readonly _widthConstraint: Clutter.BindConstraint;
 
 	private readonly _dialog: St.BoxLayout;
+	private readonly _tabBar: DialogTabBar;
 	private readonly _header: ClipboardDialogHeader;
 	private readonly _scrollView: ClipboardScrollView;
 	private readonly _footer: ClipboardDialogFooter;
 	private readonly _clipboardItemMenu: ClipboardItemMenu;
+	private readonly _emojiView: EmojiView;
+	private readonly _charactersView: CharactersView;
+	private _clipboardWidth: number = 0;
 
 	constructor(private ext: CopyousExtension) {
 		super({
@@ -307,14 +297,38 @@ export class ClipboardDialog extends St.Widget {
 
 		global.focus_manager.add_group(this._dialog);
 
+		// Tab bar
+		this._tabBar = new DialogTabBar(ext);
+		this._dialog.add_child(this._tabBar);
+		this._tabBar.connect('open-settings', this.openSettings.bind(this));
+		this._tabBar.connect('tab-selected', (_actor, tab: string) => {
+			this.onTabSelected(tab as DialogTab);
+		});
+
 		// Header
 		this._header = new ClipboardDialogHeader(ext);
 		this._dialog.add_child(this._header);
 
 		this._header.connect('open-settings', this.openSettings.bind(this));
 		this._header.connect('clear-history', this.confirmClearHistory.bind(this));
-		this._header.searchEntry.connect('search', (_, query: SearchQuery) => this._scrollView.search(query));
-		this._header.searchEntry.connect('activate', () => this._scrollView.activateFirst());
+		this._header.searchEntry.connect('search', (_, query: SearchQuery) => {
+			if (this._tabBar.selectedTab === DialogTab.Emoji) {
+				this._emojiView.search(query.query);
+			} else if (this._tabBar.selectedTab === DialogTab.Characters) {
+				this._charactersView.search(query.query);
+			} else {
+				this._scrollView.search(query);
+			}
+		});
+		this._header.searchEntry.connect('activate', () => {
+			if (this._tabBar.selectedTab === DialogTab.Emoji) {
+				this._emojiView.activateFirst();
+			} else if (this._tabBar.selectedTab === DialogTab.Characters) {
+				this._charactersView.activateFirst();
+			} else {
+				this._scrollView.activateFirst();
+			}
+		});
 
 		this._header.connect('notify::header-visible', () => {
 			if (this._header.headerVisible) {
@@ -327,6 +341,29 @@ export class ClipboardDialog extends St.Widget {
 		// Scrollbox
 		this._scrollView = new ClipboardScrollView(ext);
 		this._dialog.add_child(this._scrollView);
+		this._scrollView.connect('notify::width', () => {
+			if (this._scrollView.width > 0) {
+				this._clipboardWidth = Math.round(this._scrollView.width);
+				if (this._orientation === Clutter.Orientation.VERTICAL) {
+					this._emojiView.setViewWidth(this._clipboardWidth);
+					this._charactersView.setViewWidth(this._clipboardWidth);
+				}
+			}
+		});
+
+		// Emoji View
+		this._emojiView = new EmojiView(ext);
+		this._dialog.add_child(this._emojiView);
+		this._emojiView.connect('emoji-selected', (_actor, emoji: string) => this._onEmojiSelected(emoji));
+		this._emojiView.connect('emoji-activated', (_actor, emoji: string) => this._onEmojiActivated(emoji));
+		this._emojiView.visible = false;
+
+		// Characters View
+		this._charactersView = new CharactersView(ext);
+		this._dialog.add_child(this._charactersView);
+		this._charactersView.connect('character-selected', (_actor, char: string) => this._onCharacterSelected(char));
+		this._charactersView.connect('character-activated', (_actor, char: string) => this._onCharacterActivated(char));
+		this._charactersView.visible = false;
 
 		this._widthConstraint = new Clutter.BindConstraint({
 			coordinate: Clutter.BindCoordinate.WIDTH,
@@ -385,6 +422,7 @@ export class ClipboardDialog extends St.Widget {
 			'changed::clipboard-position-horizontal', this.updatePosition.bind(this),
 			'changed::clipboard-position-vertical', this.updatePosition.bind(this),
 			'changed::clipboard-size', this.updatePosition.bind(this),
+			'changed::item-width', this.updatePosition.bind(this),
 			'changed::clipboard-margin-top', this.updateMargins.bind(this),
 			'changed::clipboard-margin-bottom', this.updateMargins.bind(this),
 			'changed::clipboard-margin-left', this.updateMargins.bind(this),
@@ -396,6 +434,8 @@ export class ClipboardDialog extends St.Widget {
 
 		// Update initial search for when exclude-pinned or exclude-tagged is enabled
 		this._scrollView.search(this._header.searchEntry.searchQuery);
+
+		this.onTabSelected(this._tabBar.selectedTab);
 	}
 
 	override destroy() {
@@ -420,9 +460,25 @@ export class ClipboardDialog extends St.Widget {
 		else this.close();
 	}
 
-	public open() {
+	public openTab(tab: DialogTab) {
+		const enableEmoji = this.ext.settings.get_boolean('enable-emoji-tab');
+		const enableCharacters = this.ext.settings.get_boolean('enable-characters-tab');
+
+		let targetTab = tab;
+		if (tab === DialogTab.Emoji && !enableEmoji) targetTab = DialogTab.Clipboard;
+		if (tab === DialogTab.Characters && !enableCharacters) targetTab = DialogTab.Clipboard;
+
+		if (!this.opened) {
+			this.open(targetTab);
+		} else {
+			this._tabBar.selectTab(targetTab);
+		}
+	}
+
+	public open(initialTab: DialogTab = DialogTab.Clipboard) {
 		if (this.opened || this._closing) return;
 
+		this._targetWindow = global.display.focus_window;
 		this._updateCursor = false;
 		this._nextCursor = this._cursor;
 
@@ -443,6 +499,8 @@ export class ClipboardDialog extends St.Widget {
 
 		this._dialog.opacity = 0;
 		this.show();
+		this._tabBar.selectTab(initialTab, false);
+		this._tabBar.updateIndicatorPosition(false);
 
 		const horizontal = this._orientation === Clutter.Orientation.HORIZONTAL;
 		if (horizontal && this._dialog.y_align === Clutter.ActorAlign.START) {
@@ -487,6 +545,9 @@ export class ClipboardDialog extends St.Widget {
 	public close() {
 		if (!this.opened) return;
 
+		this._emojiView?.clearChain();
+		this._charactersView?.clearChain();
+
 		this._closing = true;
 		this.opened = false;
 		this._updateCursor = true;
@@ -527,8 +588,11 @@ export class ClipboardDialog extends St.Widget {
 			duration: ANIMATION_TIME,
 			mode,
 			onComplete: () => {
-				Main.popModal(this._grab);
-				this._grab = null;
+				if (this._grab) {
+					Main.popModal(this._grab);
+					this._grab = null;
+				}
+				this._targetWindow = null;
 				this._closing = false;
 				this.hide();
 				global.compositor.enable_unredirect();
@@ -642,6 +706,91 @@ export class ClipboardDialog extends St.Widget {
 		this._scrollView.clearItems();
 	}
 
+	private onTabSelected(tab: DialogTab) {
+		this._emojiView?.clearChain();
+		this._charactersView?.clearChain();
+		this._header.setTab(tab);
+		if (this.mapped) {
+			this._header.searchEntry.grab_key_focus();
+		}
+
+		if (this._scrollView && this._emojiView && this._charactersView) {
+			const isVertical = this._orientation === Clutter.Orientation.VERTICAL;
+			let targetWidth: number;
+			if (isVertical) {
+				if (this._clipboardWidth > 0) {
+					targetWidth = this._clipboardWidth;
+				} else {
+					const [, prefWidth] = this._scrollView.get_preferred_width(-1);
+					const itemWidth = this.ext.settings.get_int('item-width');
+					targetWidth = prefWidth > 0 ? prefWidth : itemWidth + 30;
+				}
+			} else {
+				targetWidth = this.ext.settings.get_int('clipboard-size');
+			}
+
+			if (tab === DialogTab.Clipboard) {
+				this._scrollView.visible = true;
+				this._emojiView.visible = false;
+				this._charactersView.visible = false;
+				this._widthConstraint.source = this._scrollView;
+			} else if (tab === DialogTab.Emoji) {
+				this._emojiView.setViewWidth(targetWidth);
+				this._scrollView.visible = false;
+				this._charactersView.visible = false;
+				this._emojiView.visible = true;
+				this._widthConstraint.source = this._emojiView;
+			} else if (tab === DialogTab.Characters) {
+				this._charactersView.setViewWidth(targetWidth);
+				this._scrollView.visible = false;
+				this._emojiView.visible = false;
+				this._charactersView.visible = true;
+				this._widthConstraint.source = this._charactersView;
+			} else {
+				this._scrollView.visible = false;
+				this._emojiView.visible = false;
+				this._charactersView.visible = false;
+			}
+		}
+	}
+
+	private _canPaste(): boolean {
+		const window = this._targetWindow ?? global.display.focus_window;
+		if (!window) return false;
+		try {
+			const type = window.get_window_type();
+			return type !== Meta.WindowType.DESKTOP && type !== Meta.WindowType.DOCK;
+		} catch {
+			return false;
+		}
+	}
+
+	private _onEmojiSelected(emoji: string) {
+		this.ext.clipboardManager?.copyText(emoji);
+	}
+
+	private _onEmojiActivated(emoji: string) {
+		if (this._canPaste()) {
+			this.ext.clipboardManager?.pasteTextTransient(emoji);
+		} else {
+			this.ext.clipboardManager?.copyText(emoji);
+		}
+		this.close();
+	}
+
+	private _onCharacterSelected(character: string) {
+		this.ext.clipboardManager?.copyText(character);
+	}
+
+	private _onCharacterActivated(character: string) {
+		if (this._canPaste()) {
+			this.ext.clipboardManager?.pasteTextTransient(character);
+		} else {
+			this.ext.clipboardManager?.copyText(character);
+		}
+		this.close();
+	}
+
 	private openSettings() {
 		this.ext.openPreferences();
 		this.close();
@@ -678,17 +827,23 @@ export class ClipboardDialog extends St.Widget {
 
 			this._dialog.width = size;
 			this._dialog.height = -1;
+			this._emojiView?.setViewWidth(size);
+			this._charactersView?.setViewWidth(size);
 		} else {
 			this._dialog.remove_style_class_name('horizontal');
 			this._dialog.add_style_class_name('vertical');
 
 			this._dialog.width = -1;
 			this._dialog.height = size;
+			const itemWidth = this.ext.settings.get_int('item-width');
+			const targetWidth = this._clipboardWidth > 0 ? this._clipboardWidth : itemWidth + 30;
+			this._emojiView?.setViewWidth(targetWidth);
+			this._charactersView?.setViewWidth(targetWidth);
 		}
 
 		// Header / Footer
-		this._header.showButtons = this._orientation === Clutter.Orientation.HORIZONTAL;
-		this._footer.visible = this._orientation === Clutter.Orientation.VERTICAL;
+		this._header.showButtons = true;
+		this._footer.visible = false;
 	}
 
 	private updateMargins() {
@@ -878,8 +1033,15 @@ export class ClipboardDialog extends St.Widget {
 		// Update fit constraint
 		this.updateFitConstraint();
 
-		// Navigate to first item
-		if (!this._scrollView.navigate_focus(null, St.DirectionType.DOWN, false)) {
+		this._tabBar.updateIndicatorPosition(false);
+
+		// Navigate to first item or focus search
+		if (this._tabBar.selectedTab === DialogTab.Clipboard) {
+			if (!this._scrollView.navigate_focus(null, St.DirectionType.DOWN, false)) {
+				this._header.updateHeader(true, false);
+				this._header.searchEntry.grab_key_focus();
+			}
+		} else {
 			this._header.updateHeader(true, false);
 			this._header.searchEntry.grab_key_focus();
 		}

@@ -1,9 +1,9 @@
 {
-	"name": "Copyous",
-	"description": "Modern Clipboard Manager for GNOME",
-	"uuid": "copyous@boerdereinar.dev",
+	"name": "Glyphous",
+	"description": "All-in-one clipboard manager, emoji picker, and character map for GNOME",
+	"uuid": "glyphous@supsugam.github.com",
 	"shell-version": ["48", "49", "50", "51"],
-	"settings-schema": "org.gnome.shell.extensions.copyous",
-	"gettext-domain": "copyous@boerdereinar.dev",
-	"url": "https://github.com/boerdereinar/copyous"
+	"settings-schema": "org.gnome.shell.extensions.glyphous",
+	"gettext-domain": "glyphous@supsugam.github.com",
+	"url": "https://github.com/supSugam/glyphous"
 }

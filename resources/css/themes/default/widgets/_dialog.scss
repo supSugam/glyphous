@@ -7,41 +7,170 @@
 	padding: 0;
 	spacing: 0;
 
+	// Win Tab Bar
+	.win-tab-bar {
+		padding: $base_padding * 1.5 $base_padding * 2.5 0 $base_padding * 2.5;
+
+		.win-tabs-track {
+			spacing: 1px;
+
+			.win-tabs-buttons {
+				spacing: 3px;
+			}
+		}
+
+		.win-tab-button {
+			background-color: transparent;
+			border: none;
+			box-shadow: none;
+			border-radius: $base_border_radius;
+			padding: $scaled_padding * 0.6 $scaled_padding * 1;
+			color: st-transparentize($fg_color, 0.45);
+			transition-duration: 150ms;
+
+			StIcon {
+				icon-size: $scalable_icon_size * 1.1;
+				-st-icon-style: symbolic;
+				color: st-transparentize($fg_color, 0.45);
+				transition-duration: 150ms;
+			}
+
+			&:hover {
+				background-color: st-transparentize($fg_color, 0.93);
+				color: $fg_color;
+
+				StIcon {
+					color: $fg_color;
+				}
+			}
+
+			&:focus {
+				background-color: transparent;
+			}
+
+			&:active {
+				background-color: st-transparentize($fg_color, 0.88);
+			}
+
+			&.active,
+			&:checked,
+			&:checked:checked {
+				background-color: transparent;
+				color: -st-accent-color;
+
+				StIcon {
+					color: -st-accent-color;
+				}
+			}
+
+			&.active:hover,
+			&:checked:hover,
+			&:checked:checked:hover {
+				background-color: st-transparentize($fg_color, 0.96);
+				color: -st-accent-color;
+
+				StIcon {
+					color: -st-accent-color;
+				}
+			}
+
+			&.active:focus,
+			&:checked:focus,
+			&:checked:checked:focus {
+				background-color: transparent;
+				color: -st-accent-color;
+
+				StIcon {
+					color: -st-accent-color;
+				}
+			}
+		}
+
+		.win-tab-utility-button {
+			background-color: transparent;
+			border: none;
+			box-shadow: none;
+			border-radius: $base_border_radius;
+			padding: $scaled_padding * 1.1 $scaled_padding * 1.3;
+			margin-left: $base_padding * 0.5;
+			color: st-transparentize($fg_color, 0.45);
+			transition-duration: 150ms;
+
+			StIcon {
+				icon-size: $scalable_icon_size;
+				-st-icon-style: symbolic;
+				color: st-transparentize($fg_color, 0.45);
+			}
+
+			&:hover {
+				background-color: st-transparentize($fg_color, 0.93);
+				color: $fg_color;
+
+				StIcon {
+					color: $fg_color;
+				}
+			}
+
+			&:focus {
+				background-color: transparent;
+			}
+
+			&:active {
+				background-color: st-transparentize($fg_color, 0.88);
+			}
+
+			&:checked,
+			&:checked:checked {
+				background-color: transparent;
+				color: -st-accent-color;
+
+				StIcon {
+					color: -st-accent-color;
+				}
+			}
+		}
+
+		.win-tab-indicator {
+			background-color: -st-accent-color;
+			border-radius: 2px;
+		}
+	}
+
 	// Header
 	.dialog-header {
 		.dialog-header-box {
-			padding: $base_padding * 2.5;
-			padding-bottom: 0;
+			padding: $base_padding * 1.5 $base_padding * 2.5;
+			spacing: $base_padding * 1.5;
 
-			> StBoxLayout {
-				spacing: $base_padding * 2;
-			}
+			.dialog-title-box {
+				padding: 0 0 $base_padding * 0.5 0;
 
-			.dialog-header-icon-button {
-				@extend %surface_button;
-
-				border-radius: $forced_circular_radius;
-				padding: $scaled_padding * 2 * 0.9;
-				min-height: $scalable_icon_size * 0.9;
-
-				StIcon {
-					icon-size: $scalable_icon_size;
-					-st-icon-style: symbolic;
+				.dialog-title-label {
+					font-size: 1.15em;
+					font-weight: bold;
+					color: $fg_color;
+					padding: $scaled_padding 0;
 				}
 
-				// prettier-ignore
-				&:checked:checked {
-					@include button(normal, $c: -st-accent-color, $tc: -st-accent-fg-color, $style: default);
-					&:focus { @include button(focus, $c: -st-accent-color, $tc: -st-accent-fg-color, $style: default); }
-					&:hover { @include button(hover, $c: -st-accent-color, $tc: -st-accent-fg-color, $style: default); }
-					&:active { @include button(active, $c: -st-accent-color, $tc: -st-accent-fg-color, $style: default); }
-				}
-			}
+				.dialog-clear-button {
+					background-color: transparent;
+					border: none;
+					box-shadow: none;
+					border-radius: $base_border_radius;
+					padding: $scaled_padding * 0.8 $scaled_padding * 1.8;
+					color: st-transparentize($fg_color, 0.35);
+					font-size: 0.9em;
 
-			.dialog-header-button {
-				@extend %surface_button;
-				border-radius: $forced_circular_radius;
-				min-height: to_em(22px);
+					&:hover,
+					&:focus {
+						background-color: st-transparentize($fg_color, 0.9);
+						color: $fg_color;
+					}
+
+					&:active {
+						background-color: st-transparentize($fg_color, 0.85);
+					}
+				}
 			}
 		}
 	}

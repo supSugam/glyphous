@@ -16,6 +16,8 @@ import type { SignalMethods } from '../common/gjs.js';
 export const Shortcut = {
 	Open: 'open-clipboard-dialog-shortcut',
 	Incognito: 'toggle-incognito-mode-shortcut',
+	OpenEmoji: 'open-emoji-picker-shortcut',
+	OpenCharacters: 'open-characters-picker-shortcut',
 
 	Pin: 'pin-item-shortcut',
 	Delete: 'delete-item-shortcut',
@@ -54,6 +56,8 @@ class ShortcutBinding extends GObject.Object {
 const ShortcutManagerSignals = {
 	'open-clipboard-dialog': {},
 	'toggle-incognito-mode': {},
+	'open-emoji-picker': {},
+	'open-characters-picker': {},
 } as const;
 
 @registerClass({
@@ -82,6 +86,8 @@ export class ShortcutManager extends GObject.Object {
 
 		this.registerGlobalShortcut(Shortcut.Open, 'open-clipboard-dialog');
 		this.registerGlobalShortcut(Shortcut.Incognito, 'toggle-incognito-mode');
+		this.registerGlobalShortcut(Shortcut.OpenEmoji, 'open-emoji-picker');
+		this.registerGlobalShortcut(Shortcut.OpenCharacters, 'open-characters-picker');
 
 		this.registerShortcut(Shortcut.Pin);
 		this.registerShortcut(Shortcut.Delete);
@@ -201,6 +207,8 @@ export class ShortcutManager extends GObject.Object {
 	public destroy(): void {
 		this.unregisterGlobalShortcut(Shortcut.Open);
 		this.unregisterGlobalShortcut(Shortcut.Incognito);
+		this.unregisterGlobalShortcut(Shortcut.OpenEmoji);
+		this.unregisterGlobalShortcut(Shortcut.OpenCharacters);
 
 		this._shortcuts = {};
 		this._actor?.disconnectObject(this);

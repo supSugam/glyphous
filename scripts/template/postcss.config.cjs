@@ -2,7 +2,7 @@ const fs = require('fs');
 const postcss = require('postcss');
 
 const generateTemplate = (opts = { variant: 'dark', contrast: 'normal' }) => {
-	const variables = ['bg_color', 'fg_color', 'card_bg_color', 'search_bg_color'];
+	const variables = ['bg_color', 'fg_color', 'card_bg_color', 'search_bg_color', 'accent_color', 'accent_fg_color'];
 
 	// var -> {$var: '#{"$"}var'}
 	const decls = Object.fromEntries(
@@ -14,9 +14,18 @@ const generateTemplate = (opts = { variant: 'dark', contrast: 'normal' }) => {
 		Once: (root) => {
 			root.prepend(postcss.decl({ prop: '$variant', value: `'${opts.variant}'` }));
 			root.prepend(postcss.decl({ prop: '$contrast', value: `'${opts.contrast}'` }));
+			root.prepend(postcss.decl({ prop: '$accent_color', value: '#{"$"}accent_color' }));
+			root.prepend(postcss.decl({ prop: '$accent_fg_color', value: '#{"$"}accent_fg_color' }));
 		},
 		Rule: (rule) => {
 			if (rule.selector === 'stage') rule.remove();
+		},
+		AtRule: (atRule) => {
+			if (atRule.params) {
+				atRule.params = atRule.params
+					.replace(/-st-accent-color/g, '$accent_color')
+					.replace(/-st-accent-fg-color/g, '$accent_fg_color');
+			}
 		},
 		Comment: (comment) => {
 			comment.remove();
@@ -25,6 +34,8 @@ const generateTemplate = (opts = { variant: 'dark', contrast: 'normal' }) => {
 			...decls,
 			'*': (decl) => {
 				decl.value = decl.value
+					.replace(/-st-accent-color/g, '$accent_color')
+					.replace(/-st-accent-fg-color/g, '$accent_fg_color')
 					.replace(/(?<![{_-])lighten/g, 'st-lighten')
 					.replace(/(?<![{_-])darken/g, 'st-darken')
 					.replace(/(?<![{_-])transparentize/g, 'st-transparentize')

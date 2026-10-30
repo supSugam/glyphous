@@ -1,6 +1,6 @@
 # Constants
-NAME := copyous
-UUID := copyous@boerdereinar.dev
+NAME := glyphous
+UUID := glyphous@supsugam.github.com
 
 # Directories
 SRC_DIR := src
@@ -25,7 +25,7 @@ DBPATH ?= $(DATABASE)
 
 # Disable test database if sqlite3 is not installed
 ifeq ($(DBPATH),$(DATABASE))
-ifeq (, $(shell command -V sqlite3))
+ifeq (, $(shell command -v sqlite3 2>/dev/null))
 	DBPATH :=
 endif
 endif
@@ -75,8 +75,8 @@ resources/po/main.pot: $(SRC)
 	find src -name '*.ts' \
 	| xargs xgettext \
 		--from-code=UTF-8 \
-		--copyright-holder="Copyous" \
-		--package-name="Copyous" \
+		--copyright-holder="Glyphous" \
+		--package-name="Glyphous" \
 		--language="javascript" \
 		--sort-by-file \
 		--output="$@"
@@ -94,8 +94,8 @@ check-pot:
 	find src -name '*.ts' \
 	| xargs xgettext \
 		--from-code=UTF-8 \
-		--copyright-holder="Copyous" \
-		--package-name="Copyous" \
+		--copyright-holder="Glyphous" \
+		--package-name="Glyphous" \
 		--language="javascript" \
 		--sort-by-file \
 		--output=- \
@@ -152,7 +152,7 @@ $(foreach pair,$(THEME_VARIANTS),$(eval $(call theme_rule,$(word 1,$(subst /, ,$
 
 $(DIST_DIR)/css/template-%.css: \
 		resources/css/template.scss scripts/template/postcss.config.cjs \
-		resources/css/themes/default/_*.scss resources/css/themes/default/widgets | $(DIST_DIR)
+		resources/css/themes/default/_*.scss resources/css/themes/default/widgets/_*.scss | $(DIST_DIR)
 	@mkdir -p $(DIST_DIR)/css
 	VARIANT=$* pnpm exec postcss $< --config scripts/template | pnpm exec sass --no-source-map --stdin $@
 
@@ -198,30 +198,25 @@ $(DIST_ZIP): $(DIST_DIR)/metadata.json $(TSC) $(CSS) $(SCHEMAS) $(DEBUG_SCHEMAS)
 build: $(DIST_ZIP)
 
 # Install
-INSTALL_TARGET := $(or $(shell gnome-extensions info $(UUID) 2>/dev/null | awk -F': ' '/Path:/ {print $$2}'), install-new)
-ifeq ($(INSTALL_TARGET),)
-.PHONY = install-new
-INSTALL_TARGET := install-new
-endif
-
-$(INSTALL_TARGET): $(DIST_ZIP)
-	gnome-extensions install --force $<
-
-install: $(INSTALL_TARGET)
+.PHONY: install
+install: $(DIST_ZIP)
+	gnome-extensions install --force $(DIST_ZIP)
+	@glib-compile-schemas ~/.local/share/gnome-shell/extensions/$(UUID)/schemas 2>/dev/null || true
+	@gnome-extensions enable $(UUID) 2>/dev/null || true
 
 uninstall:
 	gnome-extensions uninstall $(UUID)
 
 # Launch
 HAS_DEVKIT := $(shell gnome-shell --help | grep -q -- --devkit && echo 1)
-MUTTER_DEVKIT := $(wildcard $(or $(shell command -V mutter-devkit 2>/dev/null), /usr/libexec/mutter-devkit))
+MUTTER_DEVKIT := $(wildcard $(or $(shell command -v mutter-devkit 2>/dev/null), /usr/libexec/mutter-devkit))
 
 export MUTTER_DEBUG_DUMMY_MODE_SPECS=$(RESOLUTION)
 export CLUTTER_TEXT_DIRECTION=$(TEXT_DIRECTION)
-export DEBUG_COPYOUS_SCHEMA=$(DEBUG_SCHEMA)
-export DEBUG_COPYOUS_DBPATH=$(DBPATH)
-export DEBUG_COPYOUS_GDA_VERSION=$(GDA_VERSION)
-export DEBUG_COPYOUS_ACTIONS=$(ACTIONS)
+export DEBUG_GLYPHOUS_SCHEMA=$(DEBUG_SCHEMA)
+export DEBUG_GLYPHOUS_DBPATH=$(DBPATH)
+export DEBUG_GLYPHOUS_GDA_VERSION=$(GDA_VERSION)
+export DEBUG_GLYPHOUS_ACTIONS=$(ACTIONS)
 
 launch: install database
 # Check for mutter-devkit
@@ -229,8 +224,15 @@ launch: install database
 # Load dconf settings
 	@dconf reset -f /org/gnome/shell/extensions/$(NAME)/debug/
 	@$(if $(filter-out default,$(DEBUG_SCHEMA)), cat $(DEBUG_SCHEMA) | dconf load /org/gnome/shell/extensions/$(NAME)/debug/)
-# Run shell
-	dbus-run-session -- gnome-shell $(if $(HAS_DEVKIT),--devkit,--nested) --wayland
+# Export host theme settings
+	@dconf dump /org/gnome/shell/extensions/user-theme/ > /tmp/user-theme-dconf.ini 2>/dev/null || true
+	@dconf dump /org/gnome/desktop/interface/ > /tmp/interface-dconf.ini 2>/dev/null || true
+# Run shell with host theme settings imported into the dbus session
+	dbus-run-session -- bash -c '\
+		dconf load /org/gnome/shell/extensions/user-theme/ < /tmp/user-theme-dconf.ini 2>/dev/null; \
+		dconf load /org/gnome/desktop/interface/ < /tmp/interface-dconf.ini 2>/dev/null; \
+		dconf write /org/gnome/shell/enabled-extensions "[\"user-theme@gnome-shell-extensions.gcampax.github.com\", \"$(UUID)\"]"; \
+		gnome-shell $(if $(HAS_DEVKIT),--devkit,--nested) --wayland'
 
 # Open settings and show logs and dconf watch output while settings are open
 launch-settings: install

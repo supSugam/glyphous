@@ -97,9 +97,9 @@ export class ClipboardEntryTracker {
 	}
 
 	private getFile(): Gio.File {
-		// Check if DEBUG_COPYOUS_DBPATH is set
+		// Check if DEBUG_GLYPHOUS_DBPATH is set
 		const environment = GLib.get_environ();
-		const debugPath = GLib.environ_getenv(environment, 'DEBUG_COPYOUS_DBPATH');
+		const debugPath = GLib.environ_getenv(environment, 'DEBUG_GLYPHOUS_DBPATH');
 		if (debugPath) {
 			this.ext.logger.log('Using debug database');
 			return Gio.File.new_for_path(debugPath);
@@ -112,9 +112,9 @@ export class ClipboardEntryTracker {
 
 	private async initSqlite(file: Gio.File | null, showError: boolean): Promise<ClipboardEntry[] | null> {
 		try {
-			// Check if DEBUG_COPYOUS_GDA_VERSION is set
+			// Check if DEBUG_GLYPHOUS_GDA_VERSION is set
 			const environment = GLib.get_environ();
-			const gdaVersion = GLib.environ_getenv(environment, 'DEBUG_COPYOUS_GDA_VERSION');
+			const gdaVersion = GLib.environ_getenv(environment, 'DEBUG_GLYPHOUS_GDA_VERSION');
 			if (gdaVersion) {
 				imports.package.require({ Gda: gdaVersion });
 			}

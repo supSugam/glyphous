@@ -218,6 +218,17 @@ export class CenterBox extends St.Widget {
 		return [min, nat];
 	}
 
+	override vfunc_get_preferred_width(forHeight: number): [number, number] {
+		const [startMin, startNat] = this._startWidget.get_preferred_width(forHeight);
+		const [centerMin, centerNat] = this.centerWidget?.visible
+			? this.centerWidget.get_preferred_width(forHeight)
+			: [0, 0];
+		const [endMin, endNat] = this._endWidget.get_preferred_width(forHeight);
+
+		const padding = this.get_theme_node().get_horizontal_padding();
+		return [startMin + centerMin + endMin + padding, startNat + centerNat + endNat + padding];
+	}
+
 	override vfunc_allocate(box: Clutter.ActorBox) {
 		super.vfunc_allocate(box);
 
@@ -227,26 +238,61 @@ export class CenterBox extends St.Widget {
 		const height = content.get_height();
 
 		const [startMin, startNat] = this._startWidget.get_preferred_width(height);
-		const [centerMin, centerNat] = this.centerWidget?.visible
-			? this.centerWidget.get_preferred_width(height)
-			: [0, 0];
 		const [endMin, endNat] = this._endWidget.get_preferred_width(height);
+		const y1 = content.y1;
+		const y2 = content.y2;
 
+		if (!this.centerWidget?.visible) {
+			const startWidth = Math.clamp(width - endNat, startMin, startNat);
+			const endWidth = Math.clamp(width - startWidth, endMin, endNat);
+
+			const startBox = new Clutter.ActorBox({
+				x1: content.x1,
+				y1,
+				x2: Math.min(content.x1 + startWidth, content.x2),
+				y2,
+			});
+			this._startWidget.allocate(startBox);
+
+			const endBox = new Clutter.ActorBox({
+				x1: Math.max(content.x2 - endWidth, startBox.x2),
+				y1,
+				x2: content.x2,
+				y2,
+			});
+			this._endWidget.allocate(endBox);
+			return;
+		}
+
+		const [centerMin, centerNat] = this.centerWidget.get_preferred_width(height);
 		const centerWidth = Math.clamp(width - startMin - endMin, centerMin, centerNat);
 		const startWidth = Math.clamp(width - centerWidth - endNat, startMin, startNat);
 		const endWidth = Math.clamp(width - centerWidth - startWidth, endMin, endNat);
 
-		const y1 = content.y1;
-		const y2 = content.y2;
-		const startBox = new Clutter.ActorBox({ x1: content.x1, y1, x2: content.x1 + startWidth, y2 });
+		const startBox = new Clutter.ActorBox({
+			x1: content.x1,
+			y1,
+			x2: Math.min(content.x1 + startWidth, content.x2),
+			y2,
+		});
 		this._startWidget.allocate(startBox);
 
-		const centerX = Math.max(content.x1 + (width - centerWidth) / 2, startBox.x2);
-		const centerBox = new Clutter.ActorBox({ x1: centerX, y1, x2: centerX + centerWidth, y2 });
-		this.centerWidget?.allocate(centerBox);
+		let centerX = Math.max(content.x1 + (width - centerWidth) / 2, startBox.x2);
+		centerX = Math.min(centerX, content.x2 - endWidth - centerWidth);
+		const centerBox = new Clutter.ActorBox({
+			x1: centerX,
+			y1,
+			x2: centerX + centerWidth,
+			y2,
+		});
+		this.centerWidget.allocate(centerBox);
 
-		const endX = Math.max(content.x2 - endWidth, centerBox.x2);
-		const endBox = new Clutter.ActorBox({ x1: endX, y1, x2: endX + endWidth, y2 });
+		const endBox = new Clutter.ActorBox({
+			x1: Math.max(content.x2 - endWidth, centerBox.x2),
+			y1,
+			x2: content.x2,
+			y2,
+		});
 		this._endWidget.allocate(endBox);
 	}
 }
