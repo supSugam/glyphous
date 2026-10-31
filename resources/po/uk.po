@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 13:04+0000\n"
+"POT-Creation-Date: 2026-10-31 15:18+0000\n"
 "PO-Revision-Date: 2026-09-25 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: Ukrainian\n"
@@ -189,24 +189,24 @@ msgstr ""
 msgid "Flags"
 msgstr ""
 
-#: src/lib/misc/notifications.ts:63 src/lib/misc/notifications.ts:114
+#: src/lib/misc/notifications.ts:64 src/lib/misc/notifications.ts:115
 msgid "Copied Text"
 msgstr "Скопійовано текст"
 
-#: src/lib/misc/notifications.ts:98 src/lib/misc/notifications.ts:123
+#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:124
 msgid "Copied Image"
 msgstr "Скопійовано зображення"
 
-#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:129
+#: src/lib/misc/notifications.ts:100 src/lib/misc/notifications.ts:130
 #, javascript-format
 msgid "Size: %d×%d px"
 msgstr "Розмір: %d×%d пікс"
 
-#: src/lib/misc/notifications.ts:118
+#: src/lib/misc/notifications.ts:119
 msgid "Copied Code"
 msgstr "Скопійовано код"
 
-#: src/lib/misc/notifications.ts:142
+#: src/lib/misc/notifications.ts:143
 #, javascript-format
 msgid "Copied %d File"
 msgid_plural "Copied %d Files"
@@ -214,15 +214,19 @@ msgstr[0] "Скопійовано %d файл"
 msgstr[1] "Скопійовано %d файли"
 msgstr[2] "Скопійовано %d файлів"
 
-#: src/lib/misc/notifications.ts:148
+#: src/lib/misc/notifications.ts:149
 msgid "Copied Link"
 msgstr "Скопійовано посилання"
 
-#: src/lib/misc/notifications.ts:152
+#: src/lib/misc/notifications.ts:154
 msgid "Copied Character"
 msgstr "Скопійовано символ"
 
-#: src/lib/misc/notifications.ts:156
+#: src/lib/misc/notifications.ts:154
+msgid "Copied Emoji"
+msgstr ""
+
+#: src/lib/misc/notifications.ts:159
 msgid "Copied Color"
 msgstr "Скопійовано колір"
 
@@ -290,6 +294,7 @@ msgstr "Посилання"
 #: src/lib/preferences/actions/actionDefaults.ts:158
 #: src/lib/preferences/actions/actionDialog.ts:181
 #: src/lib/preferences/actions/actionDialog.ts:382
+#: src/lib/ui/items/characterItem.ts:25
 msgid "Character"
 msgstr "Символ"
 
@@ -1886,7 +1891,7 @@ msgstr ""
 msgid "Clear all"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:128
+#: src/lib/ui/clipboardDialog.ts:128 src/lib/ui/items/characterItem.ts:25
 msgid "Emoji"
 msgstr ""
 
@@ -1976,10 +1981,6 @@ msgid_plural "%d Files"
 msgstr[0] "%d файл"
 msgstr[1] "%d файли"
 msgstr[2] "%d файлів"
-
-#: src/lib/ui/items/characterItem.ts:22
-msgid "Char"
-msgstr "Символ"
 
 #: src/lib/ui/items/filesItem.ts:120
 #, javascript-format
@@ -2072,3 +2073,6 @@ msgstr "Налаштування вигляду"
 #: src/prefs.ts:116
 msgid "Shortcuts"
 msgstr "Комбінації клавіш"
+
+#~ msgid "Char"
+#~ msgstr "Символ"

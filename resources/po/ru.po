@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 13:04+0000\n"
+"POT-Creation-Date: 2026-10-31 15:18+0000\n"
 "PO-Revision-Date: 2025-11-30 20:29+0700\n"
 "Last-Translator: Victor <firephantom303@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -192,24 +192,24 @@ msgstr ""
 msgid "Flags"
 msgstr ""
 
-#: src/lib/misc/notifications.ts:63 src/lib/misc/notifications.ts:114
+#: src/lib/misc/notifications.ts:64 src/lib/misc/notifications.ts:115
 msgid "Copied Text"
 msgstr "Скопирован текст"
 
-#: src/lib/misc/notifications.ts:98 src/lib/misc/notifications.ts:123
+#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:124
 msgid "Copied Image"
 msgstr "Скопировано изображение"
 
-#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:129
+#: src/lib/misc/notifications.ts:100 src/lib/misc/notifications.ts:130
 #, javascript-format
 msgid "Size: %d×%d px"
 msgstr "Размер: %d×%d пикс"
 
-#: src/lib/misc/notifications.ts:118
+#: src/lib/misc/notifications.ts:119
 msgid "Copied Code"
 msgstr "Скопирован код"
 
-#: src/lib/misc/notifications.ts:142
+#: src/lib/misc/notifications.ts:143
 #, javascript-format
 msgid "Copied %d File"
 msgid_plural "Copied %d Files"
@@ -217,15 +217,19 @@ msgstr[0] "Скопирован %d файл"
 msgstr[1] "Скопировано %d файла"
 msgstr[2] "Скопировано %d файлов"
 
-#: src/lib/misc/notifications.ts:148
+#: src/lib/misc/notifications.ts:149
 msgid "Copied Link"
 msgstr "Скопирована ссылка"
 
-#: src/lib/misc/notifications.ts:152
+#: src/lib/misc/notifications.ts:154
 msgid "Copied Character"
 msgstr "Скопирован символ"
 
-#: src/lib/misc/notifications.ts:156
+#: src/lib/misc/notifications.ts:154
+msgid "Copied Emoji"
+msgstr ""
+
+#: src/lib/misc/notifications.ts:159
 msgid "Copied Color"
 msgstr "Скопирован цвет"
 
@@ -293,6 +297,7 @@ msgstr "Ссылка"
 #: src/lib/preferences/actions/actionDefaults.ts:158
 #: src/lib/preferences/actions/actionDialog.ts:181
 #: src/lib/preferences/actions/actionDialog.ts:382
+#: src/lib/ui/items/characterItem.ts:25
 msgid "Character"
 msgstr "Символ"
 
@@ -1873,7 +1878,7 @@ msgstr ""
 msgid "Clear all"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:128
+#: src/lib/ui/clipboardDialog.ts:128 src/lib/ui/items/characterItem.ts:25
 msgid "Emoji"
 msgstr ""
 
@@ -1963,10 +1968,6 @@ msgid_plural "%d Files"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
-
-#: src/lib/ui/items/characterItem.ts:22
-msgid "Char"
-msgstr "Символ"
 
 #: src/lib/ui/items/filesItem.ts:120
 #, javascript-format
@@ -2064,6 +2065,9 @@ msgstr "Сочетания клавиш"
 #~ "Automatically paste clipboard items when selected from clipboard history"
 #~ msgstr ""
 #~ "Автоматически вставлять элементы буфера обмена при выборе из истории"
+
+#~ msgid "Char"
+#~ msgstr "Символ"
 
 #~ msgid "Failed to load database"
 #~ msgstr "Не удалось загрузить базу данных"

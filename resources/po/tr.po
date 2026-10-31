@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 13:04+0000\n"
+"POT-Creation-Date: 2026-10-31 15:18+0000\n"
 "PO-Revision-Date: 2026-03-18 07:29+0300\n"
 "Last-Translator: Muha Aliss <muhaaliss@pm.me>\n"
 "Language-Team: Turkish\n"
@@ -191,39 +191,43 @@ msgstr ""
 msgid "Flags"
 msgstr ""
 
-#: src/lib/misc/notifications.ts:63 src/lib/misc/notifications.ts:114
+#: src/lib/misc/notifications.ts:64 src/lib/misc/notifications.ts:115
 msgid "Copied Text"
 msgstr "Metin Kopyalandı"
 
-#: src/lib/misc/notifications.ts:98 src/lib/misc/notifications.ts:123
+#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:124
 msgid "Copied Image"
 msgstr "Resim Kopyalandı"
 
-#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:129
+#: src/lib/misc/notifications.ts:100 src/lib/misc/notifications.ts:130
 #, javascript-format
 msgid "Size: %d×%d px"
 msgstr "Boyut: %d×%d px"
 
-#: src/lib/misc/notifications.ts:118
+#: src/lib/misc/notifications.ts:119
 msgid "Copied Code"
 msgstr "Kod Kopyalandı"
 
-#: src/lib/misc/notifications.ts:142
+#: src/lib/misc/notifications.ts:143
 #, javascript-format
 msgid "Copied %d File"
 msgid_plural "Copied %d Files"
 msgstr[0] "%d Dosya Kopyalandı"
 msgstr[1] "%d Dosya Kopyalandı"
 
-#: src/lib/misc/notifications.ts:148
+#: src/lib/misc/notifications.ts:149
 msgid "Copied Link"
 msgstr "Bağlantı Kopyalandı"
 
-#: src/lib/misc/notifications.ts:152
+#: src/lib/misc/notifications.ts:154
 msgid "Copied Character"
 msgstr "Karakter Kopyalandı"
 
-#: src/lib/misc/notifications.ts:156
+#: src/lib/misc/notifications.ts:154
+msgid "Copied Emoji"
+msgstr ""
+
+#: src/lib/misc/notifications.ts:159
 msgid "Copied Color"
 msgstr "Renk Kopyalandı"
 
@@ -291,6 +295,7 @@ msgstr "Bağlantı"
 #: src/lib/preferences/actions/actionDefaults.ts:158
 #: src/lib/preferences/actions/actionDialog.ts:181
 #: src/lib/preferences/actions/actionDialog.ts:382
+#: src/lib/ui/items/characterItem.ts:25
 msgid "Character"
 msgstr "Karakter"
 
@@ -1880,7 +1885,7 @@ msgstr ""
 msgid "Clear all"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:128
+#: src/lib/ui/clipboardDialog.ts:128 src/lib/ui/items/characterItem.ts:25
 msgid "Emoji"
 msgstr ""
 
@@ -1966,10 +1971,6 @@ msgid "%d File"
 msgid_plural "%d Files"
 msgstr[0] "%d Dosya"
 msgstr[1] "%d Dosya"
-
-#: src/lib/ui/items/characterItem.ts:22
-msgid "Char"
-msgstr "Karakter"
 
 #: src/lib/ui/items/filesItem.ts:120
 #, javascript-format
@@ -2064,6 +2065,9 @@ msgstr "Kısayollar"
 #~ msgid ""
 #~ "Automatically paste clipboard items when selected from clipboard history"
 #~ msgstr "Pano geçmişinden bir öğe seçildiğinde otomatik olarak yapıştır"
+
+#~ msgid "Char"
+#~ msgstr "Karakter"
 
 #~ msgid "Failed to load database"
 #~ msgstr "Veritabanı yüklenemedi"

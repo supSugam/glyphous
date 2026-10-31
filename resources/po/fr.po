@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 13:04+0000\n"
+"POT-Creation-Date: 2026-10-31 15:18+0000\n"
 "PO-Revision-Date: 2025-12-06 04:59+0100\n"
 "Last-Translator: Axel Haustant <noirbizarre@gmail.com>\n"
 "Language-Team: \n"
@@ -191,39 +191,43 @@ msgstr ""
 msgid "Flags"
 msgstr ""
 
-#: src/lib/misc/notifications.ts:63 src/lib/misc/notifications.ts:114
+#: src/lib/misc/notifications.ts:64 src/lib/misc/notifications.ts:115
 msgid "Copied Text"
 msgstr "Texte copié"
 
-#: src/lib/misc/notifications.ts:98 src/lib/misc/notifications.ts:123
+#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:124
 msgid "Copied Image"
 msgstr "Image copiée"
 
-#: src/lib/misc/notifications.ts:99 src/lib/misc/notifications.ts:129
+#: src/lib/misc/notifications.ts:100 src/lib/misc/notifications.ts:130
 #, javascript-format
 msgid "Size: %d×%d px"
 msgstr "Taille : %d×%d px"
 
-#: src/lib/misc/notifications.ts:118
+#: src/lib/misc/notifications.ts:119
 msgid "Copied Code"
 msgstr "Code copié"
 
-#: src/lib/misc/notifications.ts:142
+#: src/lib/misc/notifications.ts:143
 #, javascript-format
 msgid "Copied %d File"
 msgid_plural "Copied %d Files"
 msgstr[0] "Copié %d fichier"
 msgstr[1] "Copié %d fichiers"
 
-#: src/lib/misc/notifications.ts:148
+#: src/lib/misc/notifications.ts:149
 msgid "Copied Link"
 msgstr "Lien copié"
 
-#: src/lib/misc/notifications.ts:152
+#: src/lib/misc/notifications.ts:154
 msgid "Copied Character"
 msgstr "Caractère copié"
 
-#: src/lib/misc/notifications.ts:156
+#: src/lib/misc/notifications.ts:154
+msgid "Copied Emoji"
+msgstr ""
+
+#: src/lib/misc/notifications.ts:159
 msgid "Copied Color"
 msgstr "Couleur copiée"
 
@@ -291,6 +295,7 @@ msgstr "Lien"
 #: src/lib/preferences/actions/actionDefaults.ts:158
 #: src/lib/preferences/actions/actionDialog.ts:181
 #: src/lib/preferences/actions/actionDialog.ts:382
+#: src/lib/ui/items/characterItem.ts:25
 msgid "Character"
 msgstr "Caractère"
 
@@ -1908,7 +1913,7 @@ msgstr ""
 msgid "Clear all"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:128
+#: src/lib/ui/clipboardDialog.ts:128 src/lib/ui/items/characterItem.ts:25
 msgid "Emoji"
 msgstr ""
 
@@ -1994,10 +1999,6 @@ msgid "%d File"
 msgid_plural "%d Files"
 msgstr[0] "%d Fichier"
 msgstr[1] "%d Fichiers"
-
-#: src/lib/ui/items/characterItem.ts:22
-msgid "Char"
-msgstr "Car"
 
 #: src/lib/ui/items/filesItem.ts:120
 #, javascript-format
@@ -2094,6 +2095,9 @@ msgstr "Raccourcis"
 #~ msgstr ""
 #~ "Colle automatiquement les éléments du presse-papiers lorsqu'ils sont "
 #~ "sélectionnés dans l'historique du presse-papiers"
+
+#~ msgid "Char"
+#~ msgstr "Car"
 
 #~ msgid "Failed to load database"
 #~ msgstr "Échec du chargement de la base de données"
