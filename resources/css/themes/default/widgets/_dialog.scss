@@ -7,19 +7,7 @@
 	padding: 0;
 	spacing: 0;
 
-	// While dragging, elevate and provide a solid background to eliminate blur lag and ghosting
-	&.dragging,
-	.bms-popup-background-dark &.dragging,
-	.bms-popup-background-light &.dragging,
-	.bms-popup-background-transparent &.dragging,
-	.bms-popup-surface-dark &.dragging,
-	.bms-popup-surface-light &.dragging,
-	.bms-popup-surface-transparent &.dragging {
-		background-color: $bg_color !important;
-		box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.5) !important;
-	}
-
-	// Disable animations/transitions while actively dragging to prevent Blur my Shell fade illusion
+	// Disable animations/transitions while actively dragging for crisp responsiveness
 	&.dragging {
 		* {
 			transition-duration: 0s !important;
