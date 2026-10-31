@@ -116,7 +116,7 @@
 			<summary>Store clipboard history in memory instead of on disk (Deprecated)</summary>
 		</key>
 		<key name="database-backend" enum="org.gnome.shell.extensions.glyphous.DatabaseBackend">
-			<default>'sqlite'</default>
+			<default>'default'</default>
 			<summary>Selects which backend to use for the clipboard database.</summary>
 		</key>
 		<key name="database-location" type="s">
