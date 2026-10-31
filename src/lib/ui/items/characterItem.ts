@@ -9,6 +9,7 @@ import { registerClass } from '../../common/gjs.js';
 import { Icon } from '../../common/icons.js';
 import { CharacterItemSettings } from '../../common/settings.js';
 import { ClipboardEntry } from '../../database/database.js';
+import { isEmoji } from '../../emoji/emojiTypes.js';
 import { ClipboardItem } from './clipboardItem.js';
 
 @registerClass()
@@ -19,7 +20,11 @@ export class CharacterItem extends ClipboardItem {
 	private readonly _chars: St.Label;
 
 	constructor(ext: CopyousExtension, entry: ClipboardEntry) {
-		super(ext, entry, Icon.Character, _('Char'));
+		const emoji = isEmoji(entry.content);
+		const icon = emoji ? Icon.Emoji : Icon.Character;
+		const title = emoji ? _('Emoji') : _('Character');
+
+		super(ext, entry, icon, title);
 
 		this.characterItemSettings = this.ext.settings.get_child('character-item');
 

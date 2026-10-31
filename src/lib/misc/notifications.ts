@@ -14,6 +14,7 @@ import { ItemType } from '../common/constants.js';
 import { registerClass } from '../common/gjs.js';
 import { Icon, loadIcon } from '../common/icons.js';
 import { ClipboardEntry } from '../database/database.js';
+import { isEmoji } from '../emoji/emojiTypes.js';
 import { normalizeIndentation, trim } from '../ui/components/label.js';
 import { commonDirectory } from '../ui/items/filesItem.js';
 
@@ -148,10 +149,12 @@ export class NotificationManager extends GObject.Object {
 				title = _('Copied Link');
 				gicon = loadIcon(this.ext, Icon.Link);
 				break;
-			case ItemType.Character:
-				title = _('Copied Character');
-				gicon = loadIcon(this.ext, Icon.Character);
+			case ItemType.Character: {
+				const emoji = isEmoji(entry.content);
+				title = emoji ? _('Copied Emoji') : _('Copied Character');
+				gicon = loadIcon(this.ext, emoji ? Icon.Emoji : Icon.Character);
 				break;
+			}
 			case ItemType.Color:
 				title = _('Copied Color');
 				gicon = loadIcon(this.ext, Icon.Color);

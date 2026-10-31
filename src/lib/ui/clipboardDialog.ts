@@ -940,6 +940,10 @@ export class ClipboardDialog extends St.Widget {
 		);
 	}
 
+	// Note on third-party blur effects (e.g., Blur my Shell):
+	// The dialog is a Clutter actor inside the GNOME Shell stage, not an external Wayland surface.
+	// Blur my Shell repaints blurred background textures asynchronously via GLib.idle_add,
+	// which inherently introduces a 1-2 frame latency behind active Clutter translation during dragging.
 	private _onDragStart(pointerX: number, pointerY: number): void {
 		this._isDragging = true;
 		this._dragHandle.setDragging(true);

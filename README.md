@@ -135,6 +135,10 @@ gdbus call --session \
     --method org.gnome.Shell.Extensions.Glyphous.ClearHistory false
 ```
 
+## Known Limitations
+
+- **Blur my Shell dragging latency**: When moving the clipboard dialog while [Blur my Shell](https://github.com/aunetx/blur-my-shell) is enabled, the blurred backdrop texture may visually trail behind the dialog frame. This occurs because the dialog is an in-process GNOME Shell Clutter actor (`St.Widget`), whereas Blur my Shell schedules its multi-pass shader texture repaints asynchronously via `GLib.idle_add` on the main loop. If this visual latency is undesirable, you can exclude Glyphous in Blur my Shell's popup whitelist settings.
+
 ## Contributing
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for more information.
 

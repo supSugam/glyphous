@@ -75,3 +75,12 @@ export function resolveEmoji(record: EmojiRecord, tone: SkinTone): string {
 	if (tone === SkinTone.Default || !record.s) return record.e;
 	return record.s[tone - 1] ?? record.e;
 }
+
+const EMOJI_PATTERN = /^[\p{Extended_Pictographic}\uFE0F\u200D\p{Emoji_Modifier}\p{Regional_Indicator}]+$/u;
+
+export function isEmoji(text: string): boolean {
+	const trimmed = text.trim();
+	if (!trimmed) return false;
+	if (trimmed.length === 1 && trimmed.charCodeAt(0) <= 0x00ff) return false;
+	return EMOJI_PATTERN.test(trimmed);
+}
