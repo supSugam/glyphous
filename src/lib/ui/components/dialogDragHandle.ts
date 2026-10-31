@@ -22,12 +22,13 @@ export class DialogDragHandle extends St.BoxLayout {
 
 	private readonly _pill: St.Widget;
 	private _lastClickTime: number = 0;
+	private _isDragging: boolean = false;
 
 	constructor(_ext?: CopyousExtension) {
 		super({
 			style_class: 'dialog-drag-handle',
 			orientation: Clutter.Orientation.HORIZONTAL,
-			x_align: Clutter.ActorAlign.CENTER,
+			x_align: Clutter.ActorAlign.FILL,
 			x_expand: true,
 			reactive: true,
 			track_hover: true,
@@ -37,8 +38,29 @@ export class DialogDragHandle extends St.BoxLayout {
 			style_class: 'dialog-drag-handle-pill',
 			x_align: Clutter.ActorAlign.CENTER,
 			y_align: Clutter.ActorAlign.CENTER,
+			x_expand: true,
+			width: 36,
+			height: 4,
 		});
 		this.add_child(this._pill);
+
+		this.connect('notify::hover', () => {
+			if (this._isDragging) return;
+			const cursor = this.hover ? Clutter.CursorType.GRAB : Clutter.CursorType.DEFAULT;
+			this.set_cursor_type(cursor);
+			global.stage.set_cursor_type(cursor);
+		});
+	}
+
+	public setDragging(dragging: boolean): void {
+		this._isDragging = dragging;
+		const cursor = dragging
+			? Clutter.CursorType.GRABBING
+			: this.hover
+				? Clutter.CursorType.GRAB
+				: Clutter.CursorType.DEFAULT;
+		this.set_cursor_type(cursor);
+		global.stage.set_cursor_type(cursor);
 	}
 
 	override vfunc_button_press_event(event: Clutter.Event): boolean {
