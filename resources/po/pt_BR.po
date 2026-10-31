@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-30 10:29+0000\n"
+"POT-Creation-Date: 2026-10-31 06:30+0000\n"
 "PO-Revision-Date: 2025-12-01 18:02-0300\n"
 "Last-Translator: Murilo Leal <murilormleal@outlook.com>\n"
 "Language-Team: Portuguese (Brazil)\n"
@@ -1170,7 +1170,7 @@ msgid "Show the emoji picker tab in the clipboard dialog"
 msgstr ""
 
 #: src/lib/preferences/customization/tabsCustomization.ts:25
-msgid "Symbols & Characters Tab"
+msgid "Symbols and Characters Tab"
 msgstr ""
 
 #: src/lib/preferences/customization/tabsCustomization.ts:26
