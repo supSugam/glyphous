@@ -43,11 +43,10 @@ function getDesktopAccentColor(): string | null {
 }
 
 function detectAccentColors(): [string, string] {
-	const desktopAccent = getDesktopAccentColor();
-	if (desktopAccent) {
-		return [desktopAccent, 'rgb(255,255,255)'];
-	}
-
+	// Priority 1: Read -st-accent-color directly from the active shell theme's root node.
+	// This is defined by themes like MeowterialYou-dark in their `stage {}` block and is
+	// always more accurate than the GSettings accent-color key, which Ubuntu hardcodes to
+	// 'orange' even when a custom theme is active.
 	const context = St.ThemeContext.get_for_stage(global.stage);
 	const rootNode = context.get_root_node();
 
@@ -63,8 +62,12 @@ function detectAccentColors(): [string, string] {
 		}
 	}
 
+	// Priority 2: Read checked background from a quick-toggle widget, which reflects the
+	// shell theme's :checked accent. toggle_mode must be true for checked: true to apply
+	// the :checked pseudo-class in the theme node.
 	const toggleButton = new St.Button({
 		style_class: 'quick-toggle',
+		toggle_mode: true,
 		checked: true,
 		visible: false,
 	});
@@ -80,10 +83,18 @@ function detectAccentColors(): [string, string] {
 		return [accent, accentForeground];
 	}
 
+	// Priority 3: GNOME's native accent color API (GNOME 45+).
 	const [systemAccent, systemAccentFg] = context.get_accent_color ? context.get_accent_color() : [null, null];
-	const accent = systemAccent ? formatColor(systemAccent) : 'rgb(53,132,228)';
-	const accentForeground = systemAccentFg ? formatColor(systemAccentFg) : 'rgb(255,255,255)';
-	return [accent, accentForeground];
+	if (systemAccent) {
+		return [formatColor(systemAccent), systemAccentFg ? formatColor(systemAccentFg) : 'rgb(255,255,255)'];
+	}
+
+	// Priority 4: GSettings accent-color key. Only used as a last resort because Ubuntu
+	// keeps this set to 'orange' even when a custom shell theme is active.
+	const desktopAccent = getDesktopAccentColor();
+	if (desktopAccent) return [desktopAccent, 'rgb(255,255,255)'];
+
+	return ['rgb(53,132,228)', 'rgb(255,255,255)'];
 }
 
 function getWidgetNode(style_class: string): St.ThemeNode | null {

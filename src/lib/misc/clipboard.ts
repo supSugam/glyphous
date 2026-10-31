@@ -89,6 +89,7 @@ export class ClipboardManager extends GObject.Object {
 	private keyboard: Keyboard | undefined;
 	private signalId: number = -1;
 	private pasteSignalId: number = -1;
+	private restoreSignalId: number = -1;
 
 	private prevClipboard: [ContentType, string] | null = null;
 
@@ -110,8 +111,10 @@ export class ClipboardManager extends GObject.Object {
 
 		if (this.signalId >= 0) this.selection.disconnect(this.signalId);
 		if (this.pasteSignalId >= 0) GLib.source_remove(this.pasteSignalId);
+		if (this.restoreSignalId >= 0) GLib.source_remove(this.restoreSignalId);
 		this.signalId = -1;
 		this.pasteSignalId = -1;
+		this.restoreSignalId = -1;
 	}
 
 	public copyContent(content: ClipboardContent, isExistingEntry: boolean = false) {
@@ -189,30 +192,23 @@ export class ClipboardManager extends GObject.Object {
 
 	public pasteTextTransient(text: string) {
 		this.clipboard.get_text(St.ClipboardType.CLIPBOARD, (_clipboard, previousText) => {
-			this.clipboard.get_text(St.ClipboardType.PRIMARY, (_primaryClipboard, previousPrimary) => {
-				this.copyContent({ type: ContentType.Text, text }, true);
-				this.clipboard.set_text(St.ClipboardType.PRIMARY, text);
+			this.copyContent({ type: ContentType.Text, text }, true);
+			this.clipboard.set_text(St.ClipboardType.PRIMARY, text);
 
-				if (this.pasteSignalId >= 0) GLib.source_remove(this.pasteSignalId);
-				this.pasteSignalId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
-					this.sendPasteKeystroke();
-					this.pasteSignalId = -1;
+			if (this.pasteSignalId >= 0) GLib.source_remove(this.pasteSignalId);
+			this.pasteSignalId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 250, () => {
+				this.sendPasteKeystroke();
+				this.pasteSignalId = -1;
 
-					const restoreClipboard = previousText && previousText !== text;
-					const restorePrimary = previousPrimary && previousPrimary !== text;
-					if (restoreClipboard || restorePrimary) {
-						GLib.timeout_add(GLib.PRIORITY_DEFAULT, 350, () => {
-							if (restoreClipboard) {
-								this.copyContent({ type: ContentType.Text, text: previousText }, true);
-							}
-							if (restorePrimary) {
-								this.clipboard.set_text(St.ClipboardType.PRIMARY, previousPrimary);
-							}
-							return GLib.SOURCE_REMOVE;
-						});
-					}
-					return GLib.SOURCE_REMOVE;
-				});
+				if (previousText && previousText !== text) {
+					if (this.restoreSignalId >= 0) GLib.source_remove(this.restoreSignalId);
+					this.restoreSignalId = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 350, () => {
+						this.copyContent({ type: ContentType.Text, text: previousText }, true);
+						this.restoreSignalId = -1;
+						return GLib.SOURCE_REMOVE;
+					});
+				}
+				return GLib.SOURCE_REMOVE;
 			});
 		});
 	}
