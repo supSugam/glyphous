@@ -7,23 +7,18 @@
 	padding: 0;
 	spacing: 0;
 
-	// Active Dragging State (elevated, opaque to prevent blur trailing artifacts)
-	&.is-dragging,
-	.bms-popup-background-dark &.is-dragging,
-	.bms-popup-background-light &.is-dragging,
-	.bms-popup-background-transparent &.is-dragging,
-	.bms-popup-surface-dark &.is-dragging,
-	.bms-popup-surface-light &.is-dragging,
-	.bms-popup-surface-transparent &.is-dragging {
-		background-color: $bg_color !important;
-		box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.45) !important;
+	// Disable animations/transitions while actively dragging to prevent Blur my Shell fade illusion
+	&.dragging {
+		* {
+			transition-duration: 0s !important;
+		}
 	}
 
 	// Drag Handle
 	.dialog-drag-handle {
-		padding: $base_padding * 0.8 0 $base_padding * 0.4 0;
-		height: 16px;
-		min-height: 16px;
+		padding: $base_padding * 1 0 $base_padding * 0.5 0;
+		height: 14px;
+		min-height: 14px;
 
 		.dialog-drag-handle-pill {
 			width: 36px;
@@ -32,14 +27,12 @@
 			min-height: 4px;
 			border-radius: 9999px;
 			background-color: st-transparentize($fg_color, 0.72);
-			transition-duration: 150ms;
+			transition: background-color 150ms ease;
 		}
 
 		&:hover,
 		&:active {
 			.dialog-drag-handle-pill {
-				width: 44px;
-				min-width: 44px;
 				background-color: $accent_color;
 			}
 		}

@@ -1,4 +1,5 @@
 import Clutter from 'gi://Clutter';
+import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import Graphene from 'gi://Graphene';
 import Meta from 'gi://Meta';
@@ -267,8 +268,9 @@ export class ClipboardDialog extends St.Widget {
 	private readonly _charactersView: CharactersView;
 	private _clipboardWidth: number = 0;
 	private _isDragging: boolean = false;
-	private _dragStartPointer: [number, number] = [0, 0];
-	private _dragStartDialog: [number, number] = [0, 0];
+	private _dragGrabOffset: [number, number] = [0, 0];
+	private _pendingDragPosition: [number, number] | null = null;
+	private _dragLaterId: number = 0;
 
 	constructor(private ext: CopyousExtension) {
 		super({
@@ -455,6 +457,10 @@ export class ClipboardDialog extends St.Widget {
 	}
 
 	override destroy() {
+		if (this._dragLaterId) {
+			global.compositor.get_laters().remove(this._dragLaterId);
+			this._dragLaterId = 0;
+		}
 		(Main.inputMethod as Clutter.InputMethod).disconnectObject(this);
 		this._ibusManager.disconnectObject(this);
 		this.ext.settings.disconnectObject(this);
@@ -562,7 +568,7 @@ export class ClipboardDialog extends St.Widget {
 		if (!this.opened) return;
 
 		if (this._isDragging) {
-			this._endDrag();
+			this._finishDrag();
 		}
 		this._emojiView?.clearChain();
 		this._charactersView?.clearChain();
@@ -892,10 +898,20 @@ export class ClipboardDialog extends St.Widget {
 		const draggedX = this.ext.settings.get_int('dragged-position-x');
 		const draggedY = this.ext.settings.get_int('dragged-position-y');
 
+		const [sw, sh] = this.allocation.get_size();
+		const box = this._dialog.get_allocation_box();
+		const dialogWidth = box.get_width() > 0 ? box.get_width() : this._dialog.width > 0 ? this._dialog.width : 400;
+		const dialogHeight =
+			box.get_height() > 0 ? box.get_height() : this._dialog.height > 0 ? this._dialog.height : 600;
+		const maxX = Math.max(0, sw - dialogWidth);
+		const maxY = Math.max(0, sh - dialogHeight);
+
 		if (rememberDragged && draggedX >= 0 && draggedY >= 0) {
 			this._fitConstraint.enabled = true;
-			this._fitConstraint.x = draggedX;
-			this._fitConstraint.y = draggedY;
+			this._fitConstraint.setPosition(
+				Math.max(0, Math.min(draggedX, maxX)),
+				Math.max(0, Math.min(draggedY, maxY)),
+			);
 			return;
 		}
 
@@ -915,78 +931,82 @@ export class ClipboardDialog extends St.Widget {
 		const node = this._dialog.get_theme_node();
 
 		this._fitConstraint.enabled = true;
-		this._fitConstraint.x = Math.max(0, x - rect.x - node.get_margin(St.Side.LEFT) + 1);
-		this._fitConstraint.y = Math.max(0, y - rect.y - node.get_margin(St.Side.TOP) + 1);
+		this._fitConstraint.setPosition(
+			Math.max(0, Math.min(x - rect.x - node.get_margin(St.Side.LEFT) + 1, maxX)),
+			Math.max(0, Math.min(y - rect.y - node.get_margin(St.Side.TOP) + 1, maxY)),
+		);
 	}
 
-	private _onDragStart(pointerX: number, pointerY: number) {
+	private _onDragStart(pointerX: number, pointerY: number): void {
 		this._isDragging = true;
 		this._dragHandle.setDragging(true);
-		this._dialog.add_style_class_name('is-dragging');
-		this._dragStartPointer = [pointerX, pointerY];
+		global.stage.set_cursor_type(Clutter.CursorType.GRABBING);
+		this._dialog.add_style_class_name('dragging');
 
-		// Always use the actual visual allocation to avoid clamping dead zones
-		const allocation = this._dialog.allocation;
-		const visualX = allocation.x1;
-		const visualY = allocation.y1;
-		this._dragStartDialog = [visualX, visualY];
-		this._fitConstraint.x = visualX;
-		this._fitConstraint.y = visualY;
+		const box = this._dialog.get_allocation_box();
+		const dialogX = box.x1;
+		const dialogY = box.y1;
+
+		this._dragGrabOffset = [pointerX - dialogX, pointerY - dialogY];
+		this._fitConstraint.setPosition(dialogX, dialogY);
 		this._fitConstraint.enabled = true;
 	}
 
-	private _endDrag() {
-		if (!this._isDragging) return;
+	private _processDragMotion(x: number, y: number): void {
+		const rawTargetX = x - this._dragGrabOffset[0];
+		const rawTargetY = y - this._dragGrabOffset[1];
 
-		// Commit GPU translation into constraint coordinates
-		const finalX = this._fitConstraint.x + this._dialog.translation_x;
-		const finalY = this._fitConstraint.y + this._dialog.translation_y;
-		this._dialog.translation_x = 0;
-		this._dialog.translation_y = 0;
-		this._fitConstraint.x = finalX;
-		this._fitConstraint.y = finalY;
+		const [sw, sh] = this.allocation.get_size();
+		const box = this._dialog.get_allocation_box();
+		const dialogWidth = box.get_width();
+		const dialogHeight = box.get_height();
+		const maxX = Math.max(0, sw - dialogWidth);
+		const maxY = Math.max(0, sh - dialogHeight);
 
-		this._isDragging = false;
-		this._dragHandle.setDragging(false);
-		this._dialog.remove_style_class_name('is-dragging');
+		const targetX = Math.max(0, Math.min(rawTargetX, maxX));
+		const targetY = Math.max(0, Math.min(rawTargetY, maxY));
 
-		if (this.ext.settings.get_boolean('remember-dragged-position')) {
-			this.ext.settings.set_int('dragged-position-x', Math.round(finalX));
-			this.ext.settings.set_int('dragged-position-y', Math.round(finalY));
+		// Clamp grab offset when cursor moves beyond boundaries to prevent dead-zone desync
+		if (rawTargetX < 0) this._dragGrabOffset[0] = x;
+		else if (rawTargetX > maxX) this._dragGrabOffset[0] = x - maxX;
+
+		if (rawTargetY < 0) this._dragGrabOffset[1] = y;
+		else if (rawTargetY > maxY) this._dragGrabOffset[1] = y - maxY;
+
+		this._pendingDragPosition = [targetX, targetY];
+		if (!this._dragLaterId) {
+			this._dragLaterId = global.compositor.get_laters().add(Meta.LaterType.BEFORE_REDRAW, () => {
+				this._dragLaterId = 0;
+				if (this._pendingDragPosition) {
+					const [px, py] = this._pendingDragPosition;
+					this._fitConstraint.setPosition(px, py);
+				}
+				return GLib.SOURCE_REMOVE;
+			});
 		}
 	}
 
-	private _applyDragMotion(pointerX: number, pointerY: number) {
-		const dx = pointerX - this._dragStartPointer[0];
-		const dy = pointerY - this._dragStartPointer[1];
+	private _finishDrag(): void {
+		this._isDragging = false;
+		this._dragHandle.setDragging(false);
+		global.stage.set_cursor_type(Clutter.CursorType.INHERIT);
+		this._dialog.remove_style_class_name('dragging');
 
-		const baseX = this._dragStartDialog[0];
-		const baseY = this._dragStartDialog[1];
-
-		// Clamp to parent allocation bounds
-		const [dialogWidth, dialogHeight] = this._dialog.get_size();
-		const [parentWidth, parentHeight] = this.get_size();
-		const maxX = Math.max(0, parentWidth - dialogWidth);
-		const maxY = Math.max(0, parentHeight - dialogHeight);
-
-		const targetX = Math.max(0, Math.min(baseX + dx, maxX));
-		const targetY = Math.max(0, Math.min(baseY + dy, maxY));
-
-		// Wall-sliding anchor: re-anchor when hitting bounds to prevent dead zones
-		const clampedDx = targetX - baseX;
-		const clampedDy = targetY - baseY;
-		if (clampedDx !== dx) {
-			this._dragStartPointer[0] = pointerX - clampedDx;
-			this._dragStartDialog[0] = targetX - clampedDx;
-		}
-		if (clampedDy !== dy) {
-			this._dragStartPointer[1] = pointerY - clampedDy;
-			this._dragStartDialog[1] = targetY - clampedDy;
+		if (this._dragLaterId) {
+			global.compositor.get_laters().remove(this._dragLaterId);
+			this._dragLaterId = 0;
 		}
 
-		// GPU transform for silky smooth motion (no layout invalidation)
-		this._dialog.translation_x = targetX - this._fitConstraint.x;
-		this._dialog.translation_y = targetY - this._fitConstraint.y;
+		if (this._pendingDragPosition) {
+			const [px, py] = this._pendingDragPosition;
+			this._fitConstraint.setPosition(px, py);
+			this._pendingDragPosition = null;
+		}
+
+		if (this.ext.settings.get_boolean('remember-dragged-position')) {
+			this.ext.settings.set_int('dragged-position-x', Math.round(this._fitConstraint.x));
+			this.ext.settings.set_int('dragged-position-y', Math.round(this._fitConstraint.y));
+		}
 	}
 
 	public resetPosition() {
@@ -1124,7 +1144,7 @@ export class ClipboardDialog extends St.Widget {
 	override vfunc_motion_event(event: Clutter.Event): boolean {
 		if (this._isDragging) {
 			const [x, y] = event.get_coords();
-			this._applyDragMotion(x, y);
+			this._processDragMotion(x, y);
 			return Clutter.EVENT_STOP;
 		}
 		return super.vfunc_motion_event(event);
@@ -1132,7 +1152,7 @@ export class ClipboardDialog extends St.Widget {
 
 	override vfunc_button_release_event(event: Clutter.Event): boolean {
 		if (this._isDragging) {
-			this._endDrag();
+			this._finishDrag();
 			return Clutter.EVENT_STOP;
 		}
 		return super.vfunc_button_release_event(event);
@@ -1152,11 +1172,11 @@ export class ClipboardDialog extends St.Widget {
 		if (this._isDragging) {
 			if (event.type() === Clutter.EventType.TOUCH_UPDATE) {
 				const [x, y] = event.get_coords();
-				this._applyDragMotion(x, y);
+				this._processDragMotion(x, y);
 				return Clutter.EVENT_STOP;
 			}
 			if (event.type() === Clutter.EventType.TOUCH_END || event.type() === Clutter.EventType.TOUCH_CANCEL) {
-				this._endDrag();
+				this._finishDrag();
 				return Clutter.EVENT_STOP;
 			}
 		}

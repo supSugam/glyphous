@@ -54,6 +54,15 @@ export class FitConstraint extends Clutter.Constraint {
 		this.notify('y');
 	}
 
+	setPosition(x: number, y: number): void {
+		if (this._x === x && this._y === y) return;
+		this._x = x;
+		this._y = y;
+		if (this.actor) this.actor.queue_relayout();
+		this.notify('x');
+		this.notify('y');
+	}
+
 	override vfunc_update_allocation(_actor: Clutter.Actor, allocation: Clutter.ActorBox): void {
 		const [width, height] = allocation.get_size();
 		const [sw, sh] = this.source.allocation.get_size();
