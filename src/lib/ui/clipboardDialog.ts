@@ -457,6 +457,9 @@ export class ClipboardDialog extends St.Widget {
 	}
 
 	override destroy() {
+		if (this._isDragging) {
+			this._finishDrag();
+		}
 		if (this._dragLaterId) {
 			global.compositor.get_laters().remove(this._dragLaterId);
 			this._dragLaterId = 0;
@@ -937,11 +940,58 @@ export class ClipboardDialog extends St.Widget {
 		);
 	}
 
+	private _setBlurVisible(visible: boolean): void {
+		try {
+			const bms = (
+				global as unknown as {
+					blur_my_shell?: {
+						_popup?: {
+							surfaces?: Map<
+								Clutter.Actor,
+								{
+									actor?: Clutter.Actor;
+									hide_surface?(): void;
+									update?(): void;
+								}
+							>;
+						};
+					};
+				}
+			).blur_my_shell;
+
+			const surfaces = bms?._popup?.surfaces;
+			if (!surfaces) return;
+
+			let surface = surfaces.get(this._dialog);
+			if (!surface) {
+				for (const [key, val] of surfaces.entries()) {
+					if (key === this._dialog || key === this) {
+						surface = val;
+						break;
+					}
+				}
+			}
+
+			if (!surface) return;
+
+			if (!visible) {
+				if (surface.actor) surface.actor.hide();
+				surface.hide_surface?.();
+			} else {
+				if (surface.actor) surface.actor.show();
+				surface.update?.();
+			}
+		} catch {
+			// Ignore if blur-my-shell is not present or structure differs
+		}
+	}
+
 	private _onDragStart(pointerX: number, pointerY: number): void {
 		this._isDragging = true;
 		this._dragHandle.setDragging(true);
 		global.stage.set_cursor_type(Clutter.CursorType.GRABBING);
 		this._dialog.add_style_class_name('dragging');
+		this._setBlurVisible(false);
 
 		const box = this._dialog.get_allocation_box();
 		const dialogX = box.x1;
@@ -991,6 +1041,7 @@ export class ClipboardDialog extends St.Widget {
 		this._dragHandle.setDragging(false);
 		global.stage.set_cursor_type(Clutter.CursorType.INHERIT);
 		this._dialog.remove_style_class_name('dragging');
+		this._setBlurVisible(true);
 
 		if (this._dragLaterId) {
 			global.compositor.get_laters().remove(this._dragLaterId);
