@@ -285,6 +285,18 @@
 			<default>false</default>
 			<summary>Show a scrollbar when items overflow</summary>
 		</key>
+		<key name="remember-dragged-position" type="b">
+			<default>false</default>
+			<summary>Remember the last dragged position of the clipboard dialog</summary>
+		</key>
+		<key name="dragged-position-x" type="i">
+			<default>-1</default>
+			<summary>X coordinate of the remembered dragged position</summary>
+		</key>
+		<key name="dragged-position-y" type="i">
+			<default>-1</default>
+			<summary>Y coordinate of the remembered dragged position</summary>
+		</key>
 
 		<!-- Tabs -->
 		<key name="enable-emoji-tab" type="b">

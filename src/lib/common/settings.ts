@@ -46,6 +46,9 @@ export const Settings = {
 
 	AutoHideSearch: 'auto-hide-search',
 	ShowScrollbar: 'show-scrollbar',
+	RememberDraggedPosition: 'remember-dragged-position',
+	DraggedPositionX: 'dragged-position-x',
+	DraggedPositionY: 'dragged-position-y',
 
 	EnableEmojiTab: 'enable-emoji-tab',
 	EnableCharactersTab: 'enable-characters-tab',
@@ -184,6 +187,9 @@ export const SettingsTypes = {
 
 	[Settings.AutoHideSearch]: 'boolean',
 	[Settings.ShowScrollbar]: 'boolean',
+	[Settings.RememberDraggedPosition]: 'boolean',
+	[Settings.DraggedPositionX]: 'int',
+	[Settings.DraggedPositionY]: 'int',
 	[Settings.EnableEmojiTab]: 'boolean',
 	[Settings.EnableCharactersTab]: 'boolean',
 	[Settings.EmojiDefaultSkinTone]: 'int',

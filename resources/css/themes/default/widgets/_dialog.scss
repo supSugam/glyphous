@@ -7,9 +7,31 @@
 	padding: 0;
 	spacing: 0;
 
+	// Drag Handle
+	.dialog-drag-handle {
+		padding: $base_padding * 1 0 $base_padding * 0.5 0;
+		height: 14px;
+
+		.dialog-drag-handle-pill {
+			width: 36px;
+			height: 4px;
+			border-radius: 9999px;
+			background-color: st-transparentize($fg_color, 0.72);
+			transition-duration: 150ms;
+		}
+
+		&:hover,
+		&:active {
+			.dialog-drag-handle-pill {
+				width: 44px;
+				background-color: $accent_color;
+			}
+		}
+	}
+
 	// Win Tab Bar
 	.win-tab-bar {
-		padding: $base_padding * 1.5 $base_padding * 2.5 0 $base_padding * 2.5;
+		padding: $base_padding * 0.8 $base_padding * 2.5 0 $base_padding * 2.5;
 
 		.win-tabs-track {
 			spacing: 1px;

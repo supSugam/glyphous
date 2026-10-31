@@ -25,6 +25,7 @@ import { VERSION } from '../misc/compatibility.js';
 import { Shortcut } from '../misc/shortcuts.js';
 import { ClipboardScrollView } from './clipboardScrollView.js';
 import { ClipboardItemMenu } from './components/clipboardItemMenu.js';
+import { DialogDragHandle } from './components/dialogDragHandle.js';
 import { DialogTab, DialogTabBar } from './components/dialogTabs.js';
 import { IncognitoButton } from './components/incognitoButton.js';
 import { ConfirmClearHistoryDialog } from './indicator.js';
@@ -256,6 +257,7 @@ export class ClipboardDialog extends St.Widget {
 	private readonly _widthConstraint: Clutter.BindConstraint;
 
 	private readonly _dialog: St.BoxLayout;
+	private readonly _dragHandle: DialogDragHandle;
 	private readonly _tabBar: DialogTabBar;
 	private readonly _header: ClipboardDialogHeader;
 	private readonly _scrollView: ClipboardScrollView;
@@ -264,6 +266,9 @@ export class ClipboardDialog extends St.Widget {
 	private readonly _emojiView: EmojiView;
 	private readonly _charactersView: CharactersView;
 	private _clipboardWidth: number = 0;
+	private _isDragging: boolean = false;
+	private _dragStartPointer: [number, number] = [0, 0];
+	private _dragStartDialog: [number, number] = [0, 0];
 
 	constructor(private ext: CopyousExtension) {
 		super({
@@ -296,6 +301,16 @@ export class ClipboardDialog extends St.Widget {
 		this._dialog.add_constraint(this._fitConstraint);
 
 		global.focus_manager.add_group(this._dialog);
+
+		// Drag handle
+		this._dragHandle = new DialogDragHandle(ext);
+		this._dialog.add_child(this._dragHandle);
+		this._dragHandle.connect('drag-start', (_handle: unknown, x: unknown, y: unknown) => {
+			if (typeof x === 'number' && typeof y === 'number') {
+				this._onDragStart(x, y);
+			}
+		});
+		this._dragHandle.connect('reset-position', () => this.resetPosition());
 
 		// Tab bar
 		this._tabBar = new DialogTabBar(ext);
@@ -418,6 +433,7 @@ export class ClipboardDialog extends St.Widget {
 		// prettier-ignore
 		this.ext.settings.connectObject(
 			'changed::show-at-pointer', this.updatePosition.bind(this),
+			'changed::remember-dragged-position', this.updatePosition.bind(this),
 			'changed::clipboard-orientation', this.updatePosition.bind(this),
 			'changed::clipboard-position-horizontal', this.updatePosition.bind(this),
 			'changed::clipboard-position-vertical', this.updatePosition.bind(this),
@@ -545,6 +561,7 @@ export class ClipboardDialog extends St.Widget {
 	public close() {
 		if (!this.opened) return;
 
+		this._isDragging = false;
 		this._emojiView?.clearChain();
 		this._charactersView?.clearChain();
 
@@ -803,6 +820,11 @@ export class ClipboardDialog extends St.Widget {
 	}
 
 	private updatePosition() {
+		const rememberDragged = this.ext.settings.get_boolean('remember-dragged-position');
+		const draggedX = this.ext.settings.get_int('dragged-position-x');
+		const draggedY = this.ext.settings.get_int('dragged-position-y');
+		const hasSavedDrag = rememberDragged && draggedX >= 0 && draggedY >= 0;
+
 		const showAtPointer = this.ext.settings.get_boolean('show-at-pointer');
 		this._orientation = this.ext.settings.get_enum('clipboard-orientation');
 		const positionVertical = this.ext.settings.get_enum('clipboard-position-vertical');
@@ -811,9 +833,9 @@ export class ClipboardDialog extends St.Widget {
 
 		this._scrollView.orientation = this._orientation;
 		this._widthConstraint.enabled = this._orientation === Clutter.Orientation.VERTICAL;
-		this._fitConstraint.enabled = showAtPointer;
+		this._fitConstraint.enabled = showAtPointer || hasSavedDrag;
 
-		if (showAtPointer) {
+		if (showAtPointer || hasSavedDrag) {
 			this._dialog.x_align = Clutter.ActorAlign.CENTER;
 			this._dialog.y_align = Clutter.ActorAlign.CENTER;
 		} else {
@@ -864,9 +886,23 @@ export class ClipboardDialog extends St.Widget {
 	}
 
 	private updateFitConstraint() {
+		const rememberDragged = this.ext.settings.get_boolean('remember-dragged-position');
+		const draggedX = this.ext.settings.get_int('dragged-position-x');
+		const draggedY = this.ext.settings.get_int('dragged-position-y');
+
+		if (rememberDragged && draggedX >= 0 && draggedY >= 0) {
+			this._fitConstraint.enabled = true;
+			this._fitConstraint.x = draggedX;
+			this._fitConstraint.y = draggedY;
+			return;
+		}
+
 		// Update fit constraint position to current pointer position
 		const showAtPointer = this.ext.settings.get_boolean('show-at-pointer');
-		if (!showAtPointer) return;
+		if (!showAtPointer) {
+			this._fitConstraint.enabled = false;
+			return;
+		}
 
 		const showAtCursor = this.ext.settings.get_boolean('show-at-cursor');
 		const [x, y] = (showAtCursor ? this._cursor : null) ?? global.get_pointer();
@@ -876,8 +912,31 @@ export class ClipboardDialog extends St.Widget {
 
 		const node = this._dialog.get_theme_node();
 
+		this._fitConstraint.enabled = true;
 		this._fitConstraint.x = Math.max(0, x - rect.x - node.get_margin(St.Side.LEFT) + 1);
 		this._fitConstraint.y = Math.max(0, y - rect.y - node.get_margin(St.Side.TOP) + 1);
+	}
+
+	private _onDragStart(pointerX: number, pointerY: number) {
+		this._isDragging = true;
+		this._dragStartPointer = [pointerX, pointerY];
+
+		if (this._fitConstraint.enabled) {
+			this._dragStartDialog = [this._fitConstraint.x, this._fitConstraint.y];
+		} else {
+			const [dialogX, dialogY] = this._dialog.get_position();
+			this._dragStartDialog = [dialogX, dialogY];
+			this._fitConstraint.x = dialogX;
+			this._fitConstraint.y = dialogY;
+			this._fitConstraint.enabled = true;
+		}
+	}
+
+	public resetPosition() {
+		this.ext.settings.set_int('dragged-position-x', -1);
+		this.ext.settings.set_int('dragged-position-y', -1);
+		this.updatePosition();
+		this.updateFitConstraint();
 	}
 
 	private shouldTriggerSearch(keysym: number) {
@@ -1005,6 +1064,32 @@ export class ClipboardDialog extends St.Widget {
 		return super.vfunc_key_press_event(event);
 	}
 
+	override vfunc_motion_event(event: Clutter.Event): boolean {
+		if (this._isDragging) {
+			const [x, y] = event.get_coords();
+			const dx = x - this._dragStartPointer[0];
+			const dy = y - this._dragStartPointer[1];
+
+			this._fitConstraint.enabled = true;
+			this._fitConstraint.x = this._dragStartDialog[0] + dx;
+			this._fitConstraint.y = this._dragStartDialog[1] + dy;
+			return Clutter.EVENT_STOP;
+		}
+		return super.vfunc_motion_event(event);
+	}
+
+	override vfunc_button_release_event(event: Clutter.Event): boolean {
+		if (this._isDragging) {
+			this._isDragging = false;
+			if (this.ext.settings.get_boolean('remember-dragged-position')) {
+				this.ext.settings.set_int('dragged-position-x', Math.round(this._fitConstraint.x));
+				this.ext.settings.set_int('dragged-position-y', Math.round(this._fitConstraint.y));
+			}
+			return Clutter.EVENT_STOP;
+		}
+		return super.vfunc_button_release_event(event);
+	}
+
 	override vfunc_button_press_event(event: Clutter.Event): boolean {
 		const [x, y] = event.get_coords();
 		if (this._dialog.get_transformed_extents().contains_point(new Graphene.Point({ x, y }))) {
@@ -1016,6 +1101,24 @@ export class ClipboardDialog extends St.Widget {
 	}
 
 	override vfunc_touch_event(event: Clutter.Event): boolean {
+		if (this._isDragging) {
+			if (event.type() === Clutter.EventType.TOUCH_UPDATE) {
+				const [x, y] = event.get_coords();
+				this._fitConstraint.enabled = true;
+				this._fitConstraint.x = this._dragStartDialog[0] + (x - this._dragStartPointer[0]);
+				this._fitConstraint.y = this._dragStartDialog[1] + (y - this._dragStartPointer[1]);
+				return Clutter.EVENT_STOP;
+			}
+			if (event.type() === Clutter.EventType.TOUCH_END || event.type() === Clutter.EventType.TOUCH_CANCEL) {
+				this._isDragging = false;
+				if (this.ext.settings.get_boolean('remember-dragged-position')) {
+					this.ext.settings.set_int('dragged-position-x', Math.round(this._fitConstraint.x));
+					this.ext.settings.set_int('dragged-position-y', Math.round(this._fitConstraint.y));
+				}
+				return Clutter.EVENT_STOP;
+			}
+		}
+
 		if (event.type() !== Clutter.EventType.TOUCH_BEGIN) return Clutter.EVENT_PROPAGATE;
 
 		const [x, y] = event.get_coords();

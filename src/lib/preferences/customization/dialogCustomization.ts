@@ -11,6 +11,7 @@ import { makeResettable } from '../utils.js';
 
 @registerClass()
 export class DialogCustomization extends Adw.PreferencesGroup {
+	private readonly _rememberDraggedPosition: Adw.SwitchRow;
 	private readonly _showAtPointer: Adw.SwitchRow;
 	private readonly _showAtCursor: Adw.SwitchRow;
 	private readonly _orientation: Adw.ComboRow;
@@ -45,6 +46,13 @@ export class DialogCustomization extends Adw.PreferencesGroup {
 			),
 		});
 		position.add_row(this._showAtCursor);
+
+		this._rememberDraggedPosition = new Adw.SwitchRow({
+			title: _('Remember Dragged Position'),
+			subtitle: _('Reopen the dialog at the last dragged position instead of the default location'),
+		});
+		position.add_row(this._rememberDraggedPosition);
+		this._rememberDraggedPosition.connect('notify::active', this.updateShowAtPointer.bind(this));
 
 		this._orientation = new Adw.ComboRow({
 			title: _('Orientation'),
@@ -127,6 +135,12 @@ export class DialogCustomization extends Adw.PreferencesGroup {
 		const settings: CopyousSettings = prefs.getSettings();
 		settings.bind('show-at-pointer', this._showAtPointer, 'active', Gio.SettingsBindFlags.DEFAULT);
 		settings.bind('show-at-cursor', this._showAtCursor, 'active', Gio.SettingsBindFlags.DEFAULT);
+		settings.bind(
+			'remember-dragged-position',
+			this._rememberDraggedPosition,
+			'active',
+			Gio.SettingsBindFlags.DEFAULT,
+		);
 		bind_enum(settings, 'clipboard-orientation', this._orientation, 'selected');
 		bind_enum(settings, 'clipboard-position-vertical', this._verticalPosition, 'selected');
 		bind_enum(settings, 'clipboard-position-horizontal', this._horizontalPosition, 'selected');
@@ -143,6 +157,7 @@ export class DialogCustomization extends Adw.PreferencesGroup {
 			settings,
 			'show-at-pointer',
 			'show-at-cursor',
+			'remember-dragged-position',
 			'clipboard-orientation',
 			'clipboard-position-vertical',
 			'clipboard-position-horizontal',
@@ -168,9 +183,11 @@ export class DialogCustomization extends Adw.PreferencesGroup {
 	}
 
 	private updateShowAtPointer() {
-		this._horizontalPosition.sensitive = !this._showAtPointer.active;
-		this._verticalPosition.sensitive = !this._showAtPointer.active;
-		this._showAtCursor.sensitive = this._showAtPointer.active;
+		const rememberDragged = this._rememberDraggedPosition.active;
+		this._showAtPointer.sensitive = !rememberDragged;
+		this._showAtCursor.sensitive = !rememberDragged && this._showAtPointer.active;
+		this._horizontalPosition.sensitive = !rememberDragged && !this._showAtPointer.active;
+		this._verticalPosition.sensitive = !rememberDragged && !this._showAtPointer.active;
 		this.updatePosition();
 	}
 
