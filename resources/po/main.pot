@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 09:50+0000\n"
+"POT-Creation-Date: 2026-10-31 13:04+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgstr ""
 
 #: src/lib/characters/characterSection.ts:105 src/lib/emoji/emojiSection.ts:100
 #: src/lib/preferences/general/historySettings.ts:137
-#: src/lib/ui/clipboardDialog.ts:222 src/lib/ui/indicator.ts:54
+#: src/lib/ui/clipboardDialog.ts:223 src/lib/ui/indicator.ts:54
 msgid "Clear"
 msgstr ""
 
@@ -848,7 +848,7 @@ msgstr ""
 
 #: src/lib/preferences/customization/items/codeItemCustomization.ts:42
 #: src/lib/preferences/customization/items/textItemCustomization.ts:30
-#: src/lib/ui/clipboardDialog.ts:130
+#: src/lib/ui/clipboardDialog.ts:131
 msgid "Characters"
 msgstr ""
 
@@ -1836,15 +1836,15 @@ msgstr ""
 msgid "Disabled"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:89 src/lib/ui/clipboardDialog.ts:124
+#: src/lib/ui/clipboardDialog.ts:90 src/lib/ui/clipboardDialog.ts:125
 msgid "Clipboard"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:98
+#: src/lib/ui/clipboardDialog.ts:99
 msgid "Clear all"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:127
+#: src/lib/ui/clipboardDialog.ts:128
 msgid "Emoji"
 msgstr ""
 
