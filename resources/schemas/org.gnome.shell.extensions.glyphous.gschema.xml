@@ -106,7 +106,7 @@
 			<summary>Disable Gda warning</summary>
 		</key>
 		<key name="disable-hljs-dialog" type="b">
-			<default>false</default>
+			<default>true</default>
 			<summary>Disable the hljs dialog from showing up when launching preferences if hljs is not installed</summary>
 		</key>
 
@@ -116,7 +116,7 @@
 			<summary>Store clipboard history in memory instead of on disk (Deprecated)</summary>
 		</key>
 		<key name="database-backend" enum="org.gnome.shell.extensions.glyphous.DatabaseBackend">
-			<default>'default'</default>
+			<default>'sqlite'</default>
 			<summary>Selects which backend to use for the clipboard database.</summary>
 		</key>
 		<key name="database-location" type="s">
@@ -222,7 +222,7 @@
 
 		<!-- Dialog -->
 		<key name="show-at-pointer" type="b">
-			<default>false</default>
+			<default>true</default>
 			<summary>Show the clipboard dialog at the pointer position</summary>
 		</key>
 		<key name="show-at-cursor" type="b">
@@ -230,11 +230,11 @@
 			<summary>Show the clipboard dialog at the text cursor position</summary>
 		</key>
 		<key name="clipboard-orientation" enum="org.gnome.shell.extensions.glyphous.Orientation">
-			<default>'horizontal'</default>
+			<default>'vertical'</default>
 			<summary>Orientation of the clipboard dialog</summary>
 		</key>
 		<key name="clipboard-position-vertical" enum="org.gnome.shell.extensions.glyphous.Position">
-			<default>'top'</default>
+			<default>'fill'</default>
 			<summary>Vertical position of the clipboard dialog</summary>
 
 			<aliases>
@@ -243,7 +243,7 @@
 			</aliases>
 		</key>
 		<key name="clipboard-position-horizontal" enum="org.gnome.shell.extensions.glyphous.Position">
-			<default>'fill'</default>
+			<default>'top'</default>
 			<summary>Horizontal position of the clipboard dialog</summary>
 
 			<aliases>
@@ -282,7 +282,7 @@
 			<summary>Automatically hide the search bar when not focused</summary>
 		</key>
 		<key name="show-scrollbar" type="b">
-			<default>true</default>
+			<default>false</default>
 			<summary>Show a scrollbar when items overflow</summary>
 		</key>
 
@@ -303,7 +303,7 @@
 
 		<!-- Item -->
 		<key name="item-width" type="i">
-			<default>250</default>
+			<default>400</default>
 			<range min="200" max="1000"/>
 			<summary>Width of a clipboard item</summary>
 		</key>
@@ -313,7 +313,7 @@
 			<summary>Height of a clipboard item</summary>
 		</key>
 		<key name="dynamic-item-height" type="b">
-			<default>false</default>
+			<default>true</default>
 			<summary>Dynamically adjust the height of the clipboard items based on their content</summary>
 		</key>
 		<key name="tab-width" type="i">
@@ -446,7 +446,7 @@
 			<summary>Show extra information</summary>
 		</key>
 		<key name="background-size" enum="org.gnome.shell.extensions.glyphous.BackgroundSize">
-			<default>'cover'</default>
+			<default>'contain'</default>
 			<summary>Background size of the image</summary>
 		</key>
 	</schema>
