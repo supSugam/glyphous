@@ -96,8 +96,9 @@ Key shortcuts for common actions. Most can be customized in extension settings.
 
 | Description           | Shortcut                                                                                                       |
 |-----------------------|----------------------------------------------------------------------------------------------------------------|
-| Open Clipboard Dialog | <kbd>Super</kbd> <kbd>Shift</kbd> <kbd>V</kbd>                                                                 |
-| Toggle Incognito Mode | <kbd>Super</kbd> <kbd>Shift</kbd> <kbd>Ctrl</kbd> <kbd>V</kbd>                                                 |
+| Open Clipboard Dialog | <kbd>Super</kbd> <kbd>V</kbd>                                                                                  |
+| Open Emoji Picker     | <kbd>Super</kbd> <kbd>Shift</kbd> <kbd>V</kbd>                                                                 |
+| Toggle Incognito Mode | <kbd>Super</kbd> <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>V</kbd>                                                 |
 | Copy Item             | <kbd>Enter</kbd> / <kbd>Space</kbd>                                                                            |
 | Run Default Action    | <kbd>Ctrl</kbd> <kbd>Enter</kbd> / <kbd>Space</kbd>                                                            |
 | Pin Item              | <kbd>Ctrl</kbd> <kbd>S</kbd>                                                                                   |

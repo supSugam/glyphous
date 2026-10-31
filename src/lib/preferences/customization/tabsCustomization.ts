@@ -22,7 +22,7 @@ export class TabsCustomization extends Adw.PreferencesGroup {
 		this.add(enableEmoji);
 
 		const enableCharacters = new Adw.SwitchRow({
-			title: _('Symbols & Characters Tab'),
+			title: _('Symbols and Characters Tab'),
 			subtitle: _('Show the symbols and special characters tab in the clipboard dialog'),
 		});
 		this.add(enableCharacters);

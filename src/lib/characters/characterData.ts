@@ -18,7 +18,7 @@ export class CharacterDataManager {
 		let jsonText: string | null = null;
 		try {
 			const bytes = Gio.resources_lookup_data(
-				'/org/gnome/Shell/Extensions/copyous/data/characters.json',
+				'/org/gnome/Shell/Extensions/glyphous/data/characters.json',
 				Gio.ResourceLookupFlags.NONE,
 			);
 			const data = bytes.get_data();

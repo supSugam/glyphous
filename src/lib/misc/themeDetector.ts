@@ -1,4 +1,5 @@
 import Cogl from 'gi://Cogl';
+import Gio from 'gi://Gio';
 import St from 'gi://St';
 
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
@@ -12,15 +13,41 @@ export interface ThemeColors {
 	searchBackgroundColor: string;
 }
 
+const GNOME_ACCENT_COLORS: Record<string, string> = {
+	blue: 'rgb(53,132,228)',
+	teal: 'rgb(33,144,164)',
+	green: 'rgb(58,148,74)',
+	yellow: 'rgb(200,136,0)',
+	orange: 'rgb(237,91,0)',
+	red: 'rgb(230,45,66)',
+	pink: 'rgb(213,97,153)',
+	purple: 'rgb(145,65,172)',
+	slate: 'rgb(111,131,150)',
+};
+
 function formatColor(color: Cogl.Color): string {
-	if (color.alpha === 255) {
-		return `rgb(${color.red},${color.green},${color.blue})`;
+	if (color.alpha === 255) return `rgb(${color.red},${color.green},${color.blue})`;
+	return `rgba(${color.red},${color.green},${color.blue},${(color.alpha / 255).toFixed(2)})`;
+}
+
+function getDesktopAccentColor(): string | null {
+	try {
+		const settings = new Gio.Settings({ schema_id: 'org.gnome.desktop.interface' });
+		const accent = settings.get_string('accent-color');
+		if (accent && GNOME_ACCENT_COLORS[accent]) return GNOME_ACCENT_COLORS[accent];
+		if (accent?.startsWith('#')) return accent;
+	} catch {
+		// Schema or key may not exist on older GNOME versions
 	}
-	const normalizedAlpha = (color.alpha / 255).toFixed(2);
-	return `rgba(${color.red},${color.green},${color.blue},${normalizedAlpha})`;
+	return null;
 }
 
 function detectAccentColors(): [string, string] {
+	const desktopAccent = getDesktopAccentColor();
+	if (desktopAccent) {
+		return [desktopAccent, 'rgb(255,255,255)'];
+	}
+
 	const context = St.ThemeContext.get_for_stage(global.stage);
 	const rootNode = context.get_root_node();
 
@@ -59,55 +86,28 @@ function detectAccentColors(): [string, string] {
 	return [accent, accentForeground];
 }
 
+function getWidgetNode(style_class: string): St.ThemeNode | null {
+	const widget = new St.Widget({ style_class, visible: false });
+	Main.uiGroup.add_child(widget);
+	const node = widget.get_theme_node();
+	widget.destroy();
+	return node;
+}
+
 function detectDialogColors(isLight: boolean): [string, string] {
-	const dialogWidget = new St.Widget({
-		style_class: 'modal-dialog',
-		visible: false,
-	});
-	Main.uiGroup.add_child(dialogWidget);
-	const dialogNode = dialogWidget.get_theme_node();
-	const dialogBackground = dialogNode?.get_background_color();
-	const dialogForeground = dialogNode?.get_foreground_color();
-	dialogWidget.destroy();
-
-	const defaultBackground = isLight ? 'rgb(250,250,251)' : 'rgb(54,54,58)';
-	const defaultForeground = isLight ? 'rgb(34,34,38)' : 'rgb(255,255,255)';
-
-	const background =
-		dialogBackground && dialogBackground.alpha > 0 ? formatColor(dialogBackground) : defaultBackground;
-	const foreground =
-		dialogForeground && dialogForeground.alpha > 0 ? formatColor(dialogForeground) : defaultForeground;
-
-	return [background, foreground];
+	const node = getWidgetNode('modal-dialog');
+	const bg = node?.get_background_color();
+	const fg = node?.get_foreground_color();
+	const defBg = isLight ? 'rgb(250,250,251)' : 'rgb(54,54,58)';
+	const defFg = isLight ? 'rgb(34,34,38)' : 'rgb(255,255,255)';
+	return [bg && bg.alpha > 0 ? formatColor(bg) : defBg, fg && fg.alpha > 0 ? formatColor(fg) : defFg];
 }
 
 function detectCardBackgroundColor(isLight: boolean): string {
-	const popupWidget = new St.Widget({
-		style_class: 'popup-menu-content',
-		visible: false,
-	});
-	Main.uiGroup.add_child(popupWidget);
-	const popupNode = popupWidget.get_theme_node();
-	const popupBackground = popupNode?.get_background_color();
-	popupWidget.destroy();
-
-	if (popupBackground && popupBackground.alpha > 0) {
-		return formatColor(popupBackground);
+	for (const cls of ['popup-menu-content', 'card']) {
+		const bg = getWidgetNode(cls)?.get_background_color();
+		if (bg && bg.alpha > 0) return formatColor(bg);
 	}
-
-	const cardWidget = new St.Widget({
-		style_class: 'card',
-		visible: false,
-	});
-	Main.uiGroup.add_child(cardWidget);
-	const cardNode = cardWidget.get_theme_node();
-	const cardBackground = cardNode?.get_background_color();
-	cardWidget.destroy();
-
-	if (cardBackground && cardBackground.alpha > 0) {
-		return formatColor(cardBackground);
-	}
-
 	return isLight ? 'rgb(255,255,255)' : 'rgb(71,71,76)';
 }
 

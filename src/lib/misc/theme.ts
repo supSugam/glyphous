@@ -23,9 +23,9 @@ export class ThemeManager extends GObject.Object {
 	private readonly _resource: Gio.Resource;
 	private readonly _themeSettings: ThemeSettings;
 	private readonly _settings: St.Settings;
-	private readonly _contrastChangedId: number;
-	private readonly _colorSchemeChangedId: number;
-	private readonly _accentColorChangedId: number;
+	private readonly _interfaceSettings: Gio.Settings | null = null;
+	private readonly _settingsIds: number[];
+	private readonly _interfaceAccentChangedId: number = -1;
 	private readonly _themeChangedId: number;
 
 	private _stylesheet: Gio.File | null = null;
@@ -43,12 +43,22 @@ export class ThemeManager extends GObject.Object {
 
 		this._settings = St.Settings.get();
 
-		this._contrastChangedId = this._settings.connect('notify::high-contrast', this.updateTheme.bind(this));
-		this._colorSchemeChangedId = this._settings.connect('notify::color-scheme', this.updateTheme.bind(this));
-		this._accentColorChangedId = this._settings.connect('notify::accent-color', this.updateTheme.bind(this));
-		this._themeChangedId = this.themeContext.connect('changed', () => {
+		const onTheme = () => {
 			if (!this._isUpdatingTheme) this.updateTheme().catch(() => {});
-		});
+		};
+
+		this._settingsIds = ['notify::high-contrast', 'notify::color-scheme', 'notify::accent-color'].map((signal) =>
+			this._settings.connect(signal, onTheme),
+		);
+
+		try {
+			this._interfaceSettings = new Gio.Settings({ schema_id: 'org.gnome.desktop.interface' });
+			this._interfaceAccentChangedId = this._interfaceSettings.connect('changed::accent-color', onTheme);
+		} catch {
+			this._interfaceSettings = null;
+		}
+
+		this._themeChangedId = this.themeContext.connect('changed', onTheme);
 
 		this.updateTheme().catch(() => {});
 	}
@@ -67,7 +77,6 @@ export class ThemeManager extends GObject.Object {
 
 	private set colorScheme(scheme: CustomColorScheme) {
 		if (scheme === this._colorScheme) return;
-
 		this._colorScheme = scheme;
 		this.notify('color-scheme');
 	}
@@ -77,22 +86,18 @@ export class ThemeManager extends GObject.Object {
 		this._stylesheet = null;
 		Gio.resources_unregister(this._resource);
 		this._themeSettings.disconnectObject(this);
-		this._settings.disconnect(this._contrastChangedId);
-		this._settings.disconnect(this._colorSchemeChangedId);
-		this._settings.disconnect(this._accentColorChangedId);
+		this._settingsIds.forEach((id) => this._settings.disconnect(id));
+		if (this._interfaceSettings && this._interfaceAccentChangedId >= 0) {
+			this._interfaceSettings.disconnect(this._interfaceAccentChangedId);
+		}
 		this.themeContext.disconnect(this._themeChangedId);
 	}
 
 	private resolveColorScheme(theme: Theme): CustomColorScheme | 'high-contrast' {
-		if (theme === Theme.Custom) {
-			return this._themeSettings.get_enum('custom-color-scheme');
-		}
-
+		if (theme === Theme.Custom) return this._themeSettings.get_enum('custom-color-scheme');
 		const colorScheme = this._themeSettings.get_enum('color-scheme');
 		if (colorScheme === ColorScheme.System) {
-			if (this._settings.high_contrast) {
-				return 'high-contrast';
-			}
+			if (this._settings.high_contrast) return 'high-contrast';
 			return Main.getStyleVariant() === 'light' ? CustomColorScheme.Light : CustomColorScheme.Dark;
 		}
 		return (colorScheme - 1) as CustomColorScheme;
@@ -112,10 +117,7 @@ export class ThemeManager extends GObject.Object {
 		try {
 			const theme = this._themeSettings.get_enum('theme');
 			const scheme = this.resolveColorScheme(theme);
-
-			if (scheme !== 'high-contrast') {
-				this.colorScheme = scheme;
-			}
+			if (scheme !== 'high-contrast') this.colorScheme = scheme;
 
 			if (scheme === 'high-contrast') {
 				const themeName = theme === Theme.Yaru ? 'yaru' : 'default';

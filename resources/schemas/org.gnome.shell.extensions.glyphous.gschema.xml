@@ -349,11 +349,11 @@
 
 		<!-- Shortcuts -->
 		<key name="open-clipboard-dialog-shortcut" type="as">
-			<default>['&lt;Super&gt;&lt;Shift&gt;v']</default>
+			<default>['&lt;Super&gt;v']</default>
 			<summary>Shortcut to open the clipboard dialog</summary>
 		</key>
 		<key name="open-emoji-picker-shortcut" type="as">
-			<default>['&lt;Super&gt;period']</default>
+			<default>['&lt;Super&gt;&lt;Shift&gt;v']</default>
 			<summary>Shortcut to open the emoji picker directly</summary>
 		</key>
 		<key name="open-characters-picker-shortcut" type="as">
