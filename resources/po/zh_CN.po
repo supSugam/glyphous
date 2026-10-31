@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 06:30+0000\n"
+"POT-Creation-Date: 2026-10-31 09:50+0000\n"
 "PO-Revision-Date: 2025-12-19 18:30+0800\n"
 "Last-Translator: everyx <lunt.luo@gmail.com>\n"
 "Language-Team: Chinese (China)\n"
@@ -32,7 +32,7 @@ msgstr ""
 
 #: src/lib/characters/characterSection.ts:105 src/lib/emoji/emojiSection.ts:100
 #: src/lib/preferences/general/historySettings.ts:137
-#: src/lib/ui/clipboardDialog.ts:221 src/lib/ui/indicator.ts:54
+#: src/lib/ui/clipboardDialog.ts:222 src/lib/ui/indicator.ts:54
 msgid "Clear"
 msgstr "清除"
 
@@ -536,156 +536,166 @@ msgstr "重置动作"
 msgid "Resetting the actions will delete all custom actions"
 msgstr "重置动作将删除所有自定义动作"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:25
+#: src/lib/preferences/customization/dialogCustomization.ts:26
 #: src/lib/preferences/shortcuts/dialogShortcuts.ts:17
 msgid "Dialog"
 msgstr "对话框"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:29
+#: src/lib/preferences/customization/dialogCustomization.ts:30
 msgid "Position"
 msgstr "位置"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:30
+#: src/lib/preferences/customization/dialogCustomization.ts:31
 msgid "Change the position of the clipboard dialog"
 msgstr "更改剪贴板对话框位置"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:35
+#: src/lib/preferences/customization/dialogCustomization.ts:36
 msgid "Show at Pointer"
 msgstr "在指针位置显示"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:36
+#: src/lib/preferences/customization/dialogCustomization.ts:37
 msgid "Show the clipboard dialog at the pointer position"
 msgstr "在指针位置显示剪贴板对话框"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:42
+#: src/lib/preferences/customization/dialogCustomization.ts:43
 msgid "Show at Text Cursor"
 msgstr "在文本光标处显示"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:44
+#: src/lib/preferences/customization/dialogCustomization.ts:45
 msgid ""
 "Show the clipboard dialog at the text cursor position whenever possible, "
 "otherwise at the pointer position"
 msgstr "尽可能在文本光标位置显示剪贴板对话框，否则在鼠标指针位置显示。"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:50
+#: src/lib/preferences/customization/dialogCustomization.ts:51
+msgid "Remember Dragged Position"
+msgstr ""
+
+#: src/lib/preferences/customization/dialogCustomization.ts:52
+msgid ""
+"Reopen the dialog at the last dragged position instead of the default "
+"location"
+msgstr ""
+
+#: src/lib/preferences/customization/dialogCustomization.ts:58
 msgid "Orientation"
 msgstr "方向"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:51
+#: src/lib/preferences/customization/dialogCustomization.ts:59
 msgid "Select the orientation of the clipboard dialog"
 msgstr "选择剪贴板对话框的方向"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:52
+#: src/lib/preferences/customization/dialogCustomization.ts:60
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:92
 msgid "Horizontal"
 msgstr "水平"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:52
+#: src/lib/preferences/customization/dialogCustomization.ts:60
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:92
 msgid "Vertical"
 msgstr "垂直"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:101
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:109
 msgid "Bottom"
 msgstr "底部"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:66
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:74
 msgid "Center"
 msgstr "中间"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:66
-#: src/lib/preferences/customization/dialogCustomization.ts:188
-#: src/lib/preferences/customization/dialogCustomization.ts:192
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:74
+#: src/lib/preferences/customization/dialogCustomization.ts:205
+#: src/lib/preferences/customization/dialogCustomization.ts:209
 msgid "Fill"
 msgstr "填充"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:87
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:95
 msgid "Top"
 msgstr "顶部"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:59
+#: src/lib/preferences/customization/dialogCustomization.ts:67
 msgid "Vertical Position"
 msgstr "垂直位置"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:60
+#: src/lib/preferences/customization/dialogCustomization.ts:68
 msgid "Select the vertical position of the clipboard dialog"
 msgstr "选择剪贴板对话框的垂直位置"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:66
-#: src/lib/preferences/customization/dialogCustomization.ts:108
+#: src/lib/preferences/customization/dialogCustomization.ts:74
+#: src/lib/preferences/customization/dialogCustomization.ts:116
 msgid "Left"
 msgstr "左侧"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:66
-#: src/lib/preferences/customization/dialogCustomization.ts:94
+#: src/lib/preferences/customization/dialogCustomization.ts:74
+#: src/lib/preferences/customization/dialogCustomization.ts:102
 msgid "Right"
 msgstr "右侧"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:68
+#: src/lib/preferences/customization/dialogCustomization.ts:76
 msgid "Horizontal Position"
 msgstr "水平位置"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:69
+#: src/lib/preferences/customization/dialogCustomization.ts:77
 msgid "Select the horizontal position of the clipboard dialog"
 msgstr "选择剪贴板对话框的水平位置"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:81
+#: src/lib/preferences/customization/dialogCustomization.ts:89
 msgid "Margins"
 msgstr "边距"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:82
+#: src/lib/preferences/customization/dialogCustomization.ts:90
 msgid "Change the distance of the dialog from the screen edges"
 msgstr "更改对话框与屏幕边缘的距离"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:88
+#: src/lib/preferences/customization/dialogCustomization.ts:96
 msgid "Distance from the top of the screen"
 msgstr "距屏幕顶部的距离"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:95
+#: src/lib/preferences/customization/dialogCustomization.ts:103
 msgid "Distance from the right of the screen"
 msgstr "距屏幕右侧的距离"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:102
+#: src/lib/preferences/customization/dialogCustomization.ts:110
 msgid "Distance from the bottom of the screen"
 msgstr "距屏幕底部的距离"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:109
+#: src/lib/preferences/customization/dialogCustomization.ts:117
 msgid "Distance from the left of the screen"
 msgstr "距屏幕左侧的距离"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:115
+#: src/lib/preferences/customization/dialogCustomization.ts:123
 msgid "Auto Hide Search"
 msgstr "自动隐藏搜索栏"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:116
+#: src/lib/preferences/customization/dialogCustomization.ts:124
 msgid "Automatically hide the search bar when not focused"
 msgstr "在未聚焦时自动隐藏搜索栏"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:121
+#: src/lib/preferences/customization/dialogCustomization.ts:129
 msgid "Show Scrollbar"
 msgstr "显示滚动条"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:122
+#: src/lib/preferences/customization/dialogCustomization.ts:130
 msgid "Show a scrollbar when items overflow"
 msgstr "内容溢出时显示滚动条"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:206
+#: src/lib/preferences/customization/dialogCustomization.ts:223
 msgid "Width"
 msgstr "宽度"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:207
+#: src/lib/preferences/customization/dialogCustomization.ts:224
 msgid "Change the width of the clipboard dialog"
 msgstr "更改剪贴板对话框的宽度"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:209
+#: src/lib/preferences/customization/dialogCustomization.ts:226
 msgid "Height"
 msgstr "高度"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:210
+#: src/lib/preferences/customization/dialogCustomization.ts:227
 msgid "Change the height of the clipboard dialog"
 msgstr "更改剪贴板对话框的高度"
 
@@ -840,7 +850,7 @@ msgstr "显示字符数、单词数或行数"
 
 #: src/lib/preferences/customization/items/codeItemCustomization.ts:42
 #: src/lib/preferences/customization/items/textItemCustomization.ts:30
-#: src/lib/ui/clipboardDialog.ts:129
+#: src/lib/ui/clipboardDialog.ts:130
 msgid "Characters"
 msgstr "字符数"
 
@@ -1835,15 +1845,15 @@ msgstr "禁用快捷键"
 msgid "Disabled"
 msgstr "已禁用"
 
-#: src/lib/ui/clipboardDialog.ts:88 src/lib/ui/clipboardDialog.ts:123
+#: src/lib/ui/clipboardDialog.ts:89 src/lib/ui/clipboardDialog.ts:124
 msgid "Clipboard"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:97
+#: src/lib/ui/clipboardDialog.ts:98
 msgid "Clear all"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:126
+#: src/lib/ui/clipboardDialog.ts:127
 msgid "Emoji"
 msgstr ""
 

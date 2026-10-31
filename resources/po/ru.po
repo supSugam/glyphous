@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 06:30+0000\n"
+"POT-Creation-Date: 2026-10-31 09:50+0000\n"
 "PO-Revision-Date: 2025-11-30 20:29+0700\n"
 "Last-Translator: Victor <firephantom303@gmail.com>\n"
 "Language-Team: Russian\n"
@@ -33,7 +33,7 @@ msgstr ""
 
 #: src/lib/characters/characterSection.ts:105 src/lib/emoji/emojiSection.ts:100
 #: src/lib/preferences/general/historySettings.ts:137
-#: src/lib/ui/clipboardDialog.ts:221 src/lib/ui/indicator.ts:54
+#: src/lib/ui/clipboardDialog.ts:222 src/lib/ui/indicator.ts:54
 msgid "Clear"
 msgstr "Очистить"
 
@@ -544,32 +544,32 @@ msgstr "Сбросить действия?"
 msgid "Resetting the actions will delete all custom actions"
 msgstr "Сброс действий удалит все пользовательские действия"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:25
+#: src/lib/preferences/customization/dialogCustomization.ts:26
 #: src/lib/preferences/shortcuts/dialogShortcuts.ts:17
 msgid "Dialog"
 msgstr "Диалоговое окно"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:29
+#: src/lib/preferences/customization/dialogCustomization.ts:30
 msgid "Position"
 msgstr "Положение"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:30
+#: src/lib/preferences/customization/dialogCustomization.ts:31
 msgid "Change the position of the clipboard dialog"
 msgstr "Изменить положение диалогового окна буфера обмена"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:35
+#: src/lib/preferences/customization/dialogCustomization.ts:36
 msgid "Show at Pointer"
 msgstr "Показывать около курсора"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:36
+#: src/lib/preferences/customization/dialogCustomization.ts:37
 msgid "Show the clipboard dialog at the pointer position"
 msgstr "Показывать диалоговое окно буфера обмена около курсора мыши"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:42
+#: src/lib/preferences/customization/dialogCustomization.ts:43
 msgid "Show at Text Cursor"
 msgstr "Показывать около текстового курсора"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:44
+#: src/lib/preferences/customization/dialogCustomization.ts:45
 msgid ""
 "Show the clipboard dialog at the text cursor position whenever possible, "
 "otherwise at the pointer position"
@@ -577,125 +577,135 @@ msgstr ""
 "Показывать диалоговое окно буфера обмена около текстового курсора, когда это "
 "возможно, иначе — около курсора мыши"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:50
+#: src/lib/preferences/customization/dialogCustomization.ts:51
+msgid "Remember Dragged Position"
+msgstr ""
+
+#: src/lib/preferences/customization/dialogCustomization.ts:52
+msgid ""
+"Reopen the dialog at the last dragged position instead of the default "
+"location"
+msgstr ""
+
+#: src/lib/preferences/customization/dialogCustomization.ts:58
 msgid "Orientation"
 msgstr "Ориентация"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:51
+#: src/lib/preferences/customization/dialogCustomization.ts:59
 msgid "Select the orientation of the clipboard dialog"
 msgstr "Выбрать ориентацию диалогового окна буфера обмена"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:52
+#: src/lib/preferences/customization/dialogCustomization.ts:60
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:92
 msgid "Horizontal"
 msgstr "Горизонтальная"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:52
+#: src/lib/preferences/customization/dialogCustomization.ts:60
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:92
 msgid "Vertical"
 msgstr "Вертикальная"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:101
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:109
 msgid "Bottom"
 msgstr "Снизу"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:66
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:74
 msgid "Center"
 msgstr "По центру"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:66
-#: src/lib/preferences/customization/dialogCustomization.ts:188
-#: src/lib/preferences/customization/dialogCustomization.ts:192
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:74
+#: src/lib/preferences/customization/dialogCustomization.ts:205
+#: src/lib/preferences/customization/dialogCustomization.ts:209
 msgid "Fill"
 msgstr "Заполнить"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:87
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:95
 msgid "Top"
 msgstr "Сверху"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:59
+#: src/lib/preferences/customization/dialogCustomization.ts:67
 msgid "Vertical Position"
 msgstr "Вертикальное положение"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:60
+#: src/lib/preferences/customization/dialogCustomization.ts:68
 msgid "Select the vertical position of the clipboard dialog"
 msgstr "Выбрать вертикальное положение диалогового окна буфера обмена"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:66
-#: src/lib/preferences/customization/dialogCustomization.ts:108
+#: src/lib/preferences/customization/dialogCustomization.ts:74
+#: src/lib/preferences/customization/dialogCustomization.ts:116
 msgid "Left"
 msgstr "Слева"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:66
-#: src/lib/preferences/customization/dialogCustomization.ts:94
+#: src/lib/preferences/customization/dialogCustomization.ts:74
+#: src/lib/preferences/customization/dialogCustomization.ts:102
 msgid "Right"
 msgstr "Справа"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:68
+#: src/lib/preferences/customization/dialogCustomization.ts:76
 msgid "Horizontal Position"
 msgstr "Горизонтальное положение"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:69
+#: src/lib/preferences/customization/dialogCustomization.ts:77
 msgid "Select the horizontal position of the clipboard dialog"
 msgstr "Выбрать горизонтальное положение диалогового окна буфера обмена"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:81
+#: src/lib/preferences/customization/dialogCustomization.ts:89
 msgid "Margins"
 msgstr "Отступы"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:82
+#: src/lib/preferences/customization/dialogCustomization.ts:90
 msgid "Change the distance of the dialog from the screen edges"
 msgstr "Изменить расстояние диалогового окна от краёв экрана"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:88
+#: src/lib/preferences/customization/dialogCustomization.ts:96
 msgid "Distance from the top of the screen"
 msgstr "Расстояние от верхнего края экрана"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:95
+#: src/lib/preferences/customization/dialogCustomization.ts:103
 msgid "Distance from the right of the screen"
 msgstr "Расстояние от правого края экрана"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:102
+#: src/lib/preferences/customization/dialogCustomization.ts:110
 msgid "Distance from the bottom of the screen"
 msgstr "Расстояние от нижнего края экрана"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:109
+#: src/lib/preferences/customization/dialogCustomization.ts:117
 msgid "Distance from the left of the screen"
 msgstr "Расстояние от левого края экрана"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:115
+#: src/lib/preferences/customization/dialogCustomization.ts:123
 msgid "Auto Hide Search"
 msgstr "Автоматически скрывать поиск"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:116
+#: src/lib/preferences/customization/dialogCustomization.ts:124
 msgid "Automatically hide the search bar when not focused"
 msgstr "Автоматически скрывать строку поиска, когда она не в фокусе"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:121
+#: src/lib/preferences/customization/dialogCustomization.ts:129
 msgid "Show Scrollbar"
 msgstr "Показывать полосу прокрутки"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:122
+#: src/lib/preferences/customization/dialogCustomization.ts:130
 msgid "Show a scrollbar when items overflow"
 msgstr "Показывать полосу прокрутки, когда элементы не помещаются"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:206
+#: src/lib/preferences/customization/dialogCustomization.ts:223
 msgid "Width"
 msgstr "Ширина"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:207
+#: src/lib/preferences/customization/dialogCustomization.ts:224
 msgid "Change the width of the clipboard dialog"
 msgstr "Изменить ширину диалогового окна буфера обмена"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:209
+#: src/lib/preferences/customization/dialogCustomization.ts:226
 msgid "Height"
 msgstr "Высота"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:210
+#: src/lib/preferences/customization/dialogCustomization.ts:227
 msgid "Change the height of the clipboard dialog"
 msgstr "Изменить высоту диалогового окна буфера обмена"
 
@@ -850,7 +860,7 @@ msgstr "Показывать количество символов, слов и�
 
 #: src/lib/preferences/customization/items/codeItemCustomization.ts:42
 #: src/lib/preferences/customization/items/textItemCustomization.ts:30
-#: src/lib/ui/clipboardDialog.ts:129
+#: src/lib/ui/clipboardDialog.ts:130
 msgid "Characters"
 msgstr "Символы"
 
@@ -1855,15 +1865,15 @@ msgstr "Отключить сочетание клавиш"
 msgid "Disabled"
 msgstr "Отключено"
 
-#: src/lib/ui/clipboardDialog.ts:88 src/lib/ui/clipboardDialog.ts:123
+#: src/lib/ui/clipboardDialog.ts:89 src/lib/ui/clipboardDialog.ts:124
 msgid "Clipboard"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:97
+#: src/lib/ui/clipboardDialog.ts:98
 msgid "Clear all"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:126
+#: src/lib/ui/clipboardDialog.ts:127
 msgid "Emoji"
 msgstr ""
 

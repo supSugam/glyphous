@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Glyphous\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-31 06:30+0000\n"
+"POT-Creation-Date: 2026-10-31 09:50+0000\n"
 "PO-Revision-Date: 2026-03-26 22:19+0100\n"
 "Last-Translator: Christian Lauinger <christian@lauinger-clan.de>\n"
 "Language-Team: \n"
@@ -32,7 +32,7 @@ msgstr ""
 
 #: src/lib/characters/characterSection.ts:105 src/lib/emoji/emojiSection.ts:100
 #: src/lib/preferences/general/historySettings.ts:137
-#: src/lib/ui/clipboardDialog.ts:221 src/lib/ui/indicator.ts:54
+#: src/lib/ui/clipboardDialog.ts:222 src/lib/ui/indicator.ts:54
 msgid "Clear"
 msgstr "Leeren"
 
@@ -547,32 +547,32 @@ msgstr ""
 "Durch das Zurücksetzen der Aktionen werden alle benutzerdefinierten Aktionen "
 "gelöscht"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:25
+#: src/lib/preferences/customization/dialogCustomization.ts:26
 #: src/lib/preferences/shortcuts/dialogShortcuts.ts:17
 msgid "Dialog"
 msgstr "Anzeige bei Pointer"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:29
+#: src/lib/preferences/customization/dialogCustomization.ts:30
 msgid "Position"
 msgstr "Position"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:30
+#: src/lib/preferences/customization/dialogCustomization.ts:31
 msgid "Change the position of the clipboard dialog"
 msgstr "Ändert die Position des Zwischenablage-Dialogs"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:35
+#: src/lib/preferences/customization/dialogCustomization.ts:36
 msgid "Show at Pointer"
 msgstr "Einblenden bei Mauszeiger"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:36
+#: src/lib/preferences/customization/dialogCustomization.ts:37
 msgid "Show the clipboard dialog at the pointer position"
 msgstr "Zeige den Zwischenablage-Dialog bei der Mauszeiger-Position"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:42
+#: src/lib/preferences/customization/dialogCustomization.ts:43
 msgid "Show at Text Cursor"
 msgstr "Einblenden beim Text-Cursor"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:44
+#: src/lib/preferences/customization/dialogCustomization.ts:45
 msgid ""
 "Show the clipboard dialog at the text cursor position whenever possible, "
 "otherwise at the pointer position"
@@ -580,125 +580,135 @@ msgstr ""
 "Zeige den Zwischenablage-Dialog beim Text-Cursor wenn möglich, ansonsten "
 "beim der Mauszeiger-Position"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:50
+#: src/lib/preferences/customization/dialogCustomization.ts:51
+msgid "Remember Dragged Position"
+msgstr ""
+
+#: src/lib/preferences/customization/dialogCustomization.ts:52
+msgid ""
+"Reopen the dialog at the last dragged position instead of the default "
+"location"
+msgstr ""
+
+#: src/lib/preferences/customization/dialogCustomization.ts:58
 msgid "Orientation"
 msgstr "Ausrichtung"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:51
+#: src/lib/preferences/customization/dialogCustomization.ts:59
 msgid "Select the orientation of the clipboard dialog"
 msgstr "Wählen Sie die Ausrichtung des Zwischenablage-Dialogs aus"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:52
+#: src/lib/preferences/customization/dialogCustomization.ts:60
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:92
 msgid "Horizontal"
 msgstr "Horizontal"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:52
+#: src/lib/preferences/customization/dialogCustomization.ts:60
 #: src/lib/preferences/customization/items/linkItemCustomization.ts:92
 msgid "Vertical"
 msgstr "Vertikal"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:101
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:109
 msgid "Bottom"
 msgstr "Unten"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:66
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:74
 msgid "Center"
 msgstr "Mitte"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:66
-#: src/lib/preferences/customization/dialogCustomization.ts:188
-#: src/lib/preferences/customization/dialogCustomization.ts:192
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:74
+#: src/lib/preferences/customization/dialogCustomization.ts:205
+#: src/lib/preferences/customization/dialogCustomization.ts:209
 msgid "Fill"
 msgstr "Füllen"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:57
-#: src/lib/preferences/customization/dialogCustomization.ts:87
+#: src/lib/preferences/customization/dialogCustomization.ts:65
+#: src/lib/preferences/customization/dialogCustomization.ts:95
 msgid "Top"
 msgstr "Oben"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:59
+#: src/lib/preferences/customization/dialogCustomization.ts:67
 msgid "Vertical Position"
 msgstr "Vertikale Position"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:60
+#: src/lib/preferences/customization/dialogCustomization.ts:68
 msgid "Select the vertical position of the clipboard dialog"
 msgstr "Wählen Sie die vertikale Position des Zwischenablage-Dialogs aus"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:66
-#: src/lib/preferences/customization/dialogCustomization.ts:108
+#: src/lib/preferences/customization/dialogCustomization.ts:74
+#: src/lib/preferences/customization/dialogCustomization.ts:116
 msgid "Left"
 msgstr "Links"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:66
-#: src/lib/preferences/customization/dialogCustomization.ts:94
+#: src/lib/preferences/customization/dialogCustomization.ts:74
+#: src/lib/preferences/customization/dialogCustomization.ts:102
 msgid "Right"
 msgstr "Rechts"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:68
+#: src/lib/preferences/customization/dialogCustomization.ts:76
 msgid "Horizontal Position"
 msgstr "Horizontale Position"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:69
+#: src/lib/preferences/customization/dialogCustomization.ts:77
 msgid "Select the horizontal position of the clipboard dialog"
 msgstr "Wählen Sie die horizontale Position des Zwischenablage-Dialogs aus"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:81
+#: src/lib/preferences/customization/dialogCustomization.ts:89
 msgid "Margins"
 msgstr "Ränder"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:82
+#: src/lib/preferences/customization/dialogCustomization.ts:90
 msgid "Change the distance of the dialog from the screen edges"
 msgstr "Ändern Sie den Abstand des Dialogfelds zu den Bildschirmrändern"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:88
+#: src/lib/preferences/customization/dialogCustomization.ts:96
 msgid "Distance from the top of the screen"
 msgstr "Abstand vom oberen Bildschirmrand"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:95
+#: src/lib/preferences/customization/dialogCustomization.ts:103
 msgid "Distance from the right of the screen"
 msgstr "Abstand vom rechten Bildschirmrand"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:102
+#: src/lib/preferences/customization/dialogCustomization.ts:110
 msgid "Distance from the bottom of the screen"
 msgstr "Abstand vom unteren Bildschirmrand"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:109
+#: src/lib/preferences/customization/dialogCustomization.ts:117
 msgid "Distance from the left of the screen"
 msgstr "Abstand vom linken Bildschirmrand"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:115
+#: src/lib/preferences/customization/dialogCustomization.ts:123
 msgid "Auto Hide Search"
 msgstr "Suche automatisch ausblenden"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:116
+#: src/lib/preferences/customization/dialogCustomization.ts:124
 msgid "Automatically hide the search bar when not focused"
 msgstr "Die Suchleiste automatisch ausblenden, wenn sie nicht im Fokus ist"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:121
+#: src/lib/preferences/customization/dialogCustomization.ts:129
 msgid "Show Scrollbar"
 msgstr "Bildlaufleiste anzeigen"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:122
+#: src/lib/preferences/customization/dialogCustomization.ts:130
 msgid "Show a scrollbar when items overflow"
 msgstr "Zeige eine Bildlaufleiste an, wenn Elemente überlaufen"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:206
+#: src/lib/preferences/customization/dialogCustomization.ts:223
 msgid "Width"
 msgstr "Breite"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:207
+#: src/lib/preferences/customization/dialogCustomization.ts:224
 msgid "Change the width of the clipboard dialog"
 msgstr "Ändern Sie die Breite des Zwischenablage-Dialogs"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:209
+#: src/lib/preferences/customization/dialogCustomization.ts:226
 msgid "Height"
 msgstr "Höhe"
 
-#: src/lib/preferences/customization/dialogCustomization.ts:210
+#: src/lib/preferences/customization/dialogCustomization.ts:227
 msgid "Change the height of the clipboard dialog"
 msgstr "Ändern Sie die Höhe des Zwischenablage-Dialogs"
 
@@ -855,7 +865,7 @@ msgstr "Anzahl der Zeichen, Wörter oder Zeilen anzeigen"
 
 #: src/lib/preferences/customization/items/codeItemCustomization.ts:42
 #: src/lib/preferences/customization/items/textItemCustomization.ts:30
-#: src/lib/ui/clipboardDialog.ts:129
+#: src/lib/ui/clipboardDialog.ts:130
 msgid "Characters"
 msgstr "Zeichen"
 
@@ -1885,15 +1895,15 @@ msgstr "Tastenkürzel deaktivieren"
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: src/lib/ui/clipboardDialog.ts:88 src/lib/ui/clipboardDialog.ts:123
+#: src/lib/ui/clipboardDialog.ts:89 src/lib/ui/clipboardDialog.ts:124
 msgid "Clipboard"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:97
+#: src/lib/ui/clipboardDialog.ts:98
 msgid "Clear all"
 msgstr ""
 
-#: src/lib/ui/clipboardDialog.ts:126
+#: src/lib/ui/clipboardDialog.ts:127
 msgid "Emoji"
 msgstr ""
 
