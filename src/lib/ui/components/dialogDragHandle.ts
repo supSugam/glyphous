@@ -33,7 +33,8 @@ export class DialogDragHandle extends St.BoxLayout {
 			track_hover: true,
 		});
 
-		this.set_cursor_type(Clutter.CursorType.GRAB);
+		// Clutter.CursorType and set_cursor_type() only exist since GNOME 49
+		this.set_cursor_type?.(Clutter.CursorType?.GRAB);
 
 		this._pill = new St.Widget({
 			style_class: 'dialog-drag-handle-pill',
@@ -42,14 +43,14 @@ export class DialogDragHandle extends St.BoxLayout {
 			width: 36,
 			height: 4,
 		});
-		this._pill.set_cursor_type(Clutter.CursorType.GRAB);
+		this._pill.set_cursor_type?.(Clutter.CursorType?.GRAB);
 		this.add_child(this._pill);
 	}
 
 	setDragging(isDragging: boolean): void {
-		const cursorType = isDragging ? Clutter.CursorType.GRABBING : Clutter.CursorType.GRAB;
-		this.set_cursor_type(cursorType);
-		this._pill.set_cursor_type(cursorType);
+		const cursorType = isDragging ? Clutter.CursorType?.GRABBING : Clutter.CursorType?.GRAB;
+		this.set_cursor_type?.(cursorType);
+		this._pill.set_cursor_type?.(cursorType);
 	}
 
 	override vfunc_button_press_event(event: Clutter.Event): boolean {
