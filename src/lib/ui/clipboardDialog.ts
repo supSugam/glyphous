@@ -512,7 +512,7 @@ export class ClipboardDialog extends St.Widget {
 		const grabFailed =
 			VERSION >= 50
 				? (grab as Clutter.Grab & { is_revoked(): boolean }).is_revoked()
-				: (grab as Clutter.Grab & { get_seat_state(): number }).get_seat_state() !== 1; // Clutter.GrabState.ALL
+				: (grab as Clutter.Grab & { get_seat_state(): number }).get_seat_state() !== 3; // Clutter.GrabState.ALL (POINTER | KEYBOARD)
 		if (grabFailed) {
 			Main.popModal(grab);
 			return;
@@ -947,7 +947,7 @@ export class ClipboardDialog extends St.Widget {
 	private _onDragStart(pointerX: number, pointerY: number): void {
 		this._isDragging = true;
 		this._dragHandle.setDragging(true);
-		global.stage.set_cursor_type(Clutter.CursorType.GRABBING);
+		global.stage.set_cursor_type?.(Clutter.CursorType?.GRABBING);
 		this._dialog.add_style_class_name('dragging');
 
 		const box = this._dialog.get_allocation_box();
@@ -996,7 +996,7 @@ export class ClipboardDialog extends St.Widget {
 	private _finishDrag(): void {
 		this._isDragging = false;
 		this._dragHandle.setDragging(false);
-		global.stage.set_cursor_type(Clutter.CursorType.INHERIT);
+		global.stage.set_cursor_type?.(Clutter.CursorType?.INHERIT);
 		this._dialog.remove_style_class_name('dragging');
 
 		if (this._dragLaterId) {
